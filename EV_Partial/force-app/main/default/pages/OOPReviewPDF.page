@@ -1,0 +1,24 @@
+<apex:page controller="OOPController" title="Export To PDF" showHeader="false" standardStylesheets="false" sidebar="false" renderAs="PDF">
+
+	<apex:stylesheet value="{!$Resource.OOPStyles}"/>
+
+    <table style="width:100%">
+        <tr>
+            <td style="width:550px;">
+                <apex:image url="{!$Resource.EagleViewLogo}" width="350" />
+            </td>
+            <td style="text-align:right;horizontal-align:right;width:500px;font-family:Arial;">
+        	    <apex:outputText style="color:#78232e; font-size: 24px;font-family:Arial;font-weight:bold;" value="NOT AN INVOICE" />
+            </td>
+        </tr>
+    </table>
+
+	<br /><br />
+
+	<!-- Opp body and lines -->
+	<c:OOPOrderDetail OOP="{!oop}" showInst="true" rendered="{!showHeader}" isPDF="true" />
+
+	<!-- Opp T&C's -->
+	<c:OOPEula OOP="{!oop}" clearstyles="true" />			
+	<br />
+</apex:page>

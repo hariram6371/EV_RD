@@ -1,0 +1,61 @@
+<apex:page controller="OOPController" title="{!oop.currentStep.title}" showHeader="false" sidebar="false" standardStylesheets="false"> 
+    <apex:composition template="OOPTemplate">
+
+        <apex:define name="header">
+			<c:OOPHeader stepFile="{!oop.currentStep.navImage}" />
+        </apex:define>
+        
+        <apex:define name="body">
+			<apex:form id="oopForm">	
+			<table style="width:98%;">
+				<tr>
+					<td style="width:50%;"></td>
+					<td style="width:50%;horizontal-align:right;text-align: right;">
+						<apex:commandButton value="Export PDF" onclick="window.open('/activate/OOPReviewPDF?id={!oop.encryptedOppID}&showheader=false', '_blank'); return false;" />
+					</td>
+				</tr>
+				<apex:outputPanel rendered="{!!oop.eulaAccepted}">
+				    <tr>
+				        <td colspan="2">
+							<c:OOPEula OOP="{!oop}" /> <!-- Opp T&C's -->
+							
+				    		<b>{!$Label.OOPTermsLanguage}</b>
+				    		<br /><br /><br />							
+				        </td>
+				    </tr>
+				    <tr>
+				        <td colspan="2">
+				            Full Name:&nbsp;&nbsp;<apex:inputText value="{!EULAName}" id="eunname" style="width:200px;" />
+				            <br /><br />
+				            Email Address:&nbsp;&nbsp;<apex:inputText value="{!EULAeMail}" id="eum" style="width:200px;" />
+				            <br /><br />
+				            <apex:inputCheckbox value="{!EULAConfirm}" id="euncheck" />
+				            I agree to be bound by the terms and conditions of these agreements
+				        </td>
+				    </tr>					
+				</apex:outputPanel>
+				<apex:outputPanel rendered="{!oop.eulaAccepted}">
+				    <tr>
+				        <td colspan="2">
+				            <div class="textHighlight">The Terms and Conditions have already been accepted.</div>
+				        </td>
+				    </tr>					
+				</apex:outputPanel>				
+			</table>
+
+			<br />
+			<div style="width:98%;horizontal-align:center;text-align: center;">
+				<apex:pageMessages />
+        	    <apex:commandButton action="{!oop.Previous}" value="I Don't Agree" immediate="true" rendered="{!!oop.eulaAccepted}" />
+        	    &nbsp;
+        		<apex:commandButton value="I Agree" action="{!TCAgree}" rendered="{!!oop.eulaAccepted}" />	
+        		
+        		<apex:commandButton action="{!oop.Previous}" value="Back" immediate="true" rendered="{!oop.eulaAccepted}"/>
+        		&nbsp;
+				<apex:commandButton action="{!oop.Next}" value="Next" rendered="{!oop.eulaAccepted}" />
+			</div >
+			<br /><br /><br /><br />	
+			</apex:form>
+        </apex:define>
+    </apex:composition>
+</apex:page>

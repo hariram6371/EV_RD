@@ -1,0 +1,58 @@
+<apex:page controller="CPIDWizardController">
+	<div class="bPageTitle">
+		<div class="ptBody">
+			<h2 class="pageDescription">Convert to Multiple Orders</h2>
+		</div>
+	</div>
+	<div style="text-align: center">
+		<apex:form >
+			<apex:outputPanel id="errorPanel" layout="block">
+				<div style="padding: 10px; color: red; font-weight: bold; display: {!IF(errorMessage == null, 'none' ,'block')}">
+					{!errorMessage}
+				</div>
+			</apex:outputPanel>
+			<apex:outputPanel id="imageryPanel" layout="block" rendered="{!isAccuPlus == false}">
+				<span class="helpButton" >Number of Orders
+					<img src="/s.gif" alt="" class="helpOrb" title="Indicate the number of CPIDs included in this project. This will be the number of child orders that are automatically created." />
+				</span>
+				<apex:inputText value="{!cpidCount}" />
+				<div style="padding: 20px">
+					<apex:commandButton action="{!save}" value="Save" styleClass="btn" reRender="errorPanel"/>
+					&nbsp;&nbsp;&nbsp;
+					<apex:commandButton action="{!cancel}" value="Cancel"  styleClass="btn"/>
+				</div>	
+			</apex:outputPanel>
+			<apex:outputPanel id="accuPlusPanel" layout="block" rendered="{!isAccuPlus}">
+				<div style="width: 100%;" >
+					<table style="margin-left: auto;margin-right: auto;">
+						<tr>
+							<td>
+								<span class="helpButton" >Number of AccuPlus Orders
+									<img src="/s.gif" alt="" class="helpOrb" title="Indicate the number of AccuPlus CPIDs included in this project. This will be the number of child AccuPlus orders that are automatically created." />
+								</span>
+							</td>
+							<td>
+								<apex:inputText value="{!accuPlusCount}"  />
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<span class="helpButton">Number of Imagery Orders
+									<img src="/s.gif" alt="" class="helpOrb" title="Indicate the number of standard Imagery CPIDs included in this project. This will be the number of child Imagery orders that are automatically created." />
+								</span>
+							</td>
+							<td>
+								<apex:inputText value="{!cpidCount}" />
+							</td>
+						</tr>
+					</table>
+				</div>
+				<div style="padding: 20px">
+					<apex:commandButton action="{!save}" value="Save"  styleClass="btn" reRender="errorPanel"/>
+					&nbsp;&nbsp;&nbsp;
+					<apex:commandButton action="{!cancel}" value="Cancel"  styleClass="btn"/>
+				</div>	
+			</apex:outputPanel>
+		</apex:form>
+	</div>
+</apex:page>

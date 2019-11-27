@@ -1,0 +1,157 @@
+<!--
+ - Created by SentientGrey on 11/12/17.
+ -->
+
+<apex:page id="OrderImageCorrectionBlocks" standardController="Image_Correction_Block__c" recordSetVar="icBlocks" extensions="OrderImageCorrectionBlocksController" >
+    <style>
+        select[id$='mlktp'] {display:none;}
+    </style>
+
+    <apex:sectionHeader title="{!ord.Name}"  subtitle="Edit Image Correction Blocks"/>
+    <apex:form >
+        <apex:pageMessages />
+        <apex:pageBlock title="Edit Image Correction Blocks" mode="edit" id="mainBlock">
+            <apex:pageBlockSection title="Image Correction Block Detail" collapsible="false" columns="2" >
+                <apex:outputField value="{!primaryBlock.Order_Number__c}" />
+                <apex:inputField value="{!primaryBlock.Image_Correction_Builder__c}" />
+
+                <apex:pageBlockSectionItem />
+                <apex:pageBlockSectionItem />
+
+                <apex:inputField value="{!primaryBlock.Description__c}" />
+                <apex:outputField value="{!primaryBlock.Scheduled_Initial_IC_Due_Date__c}" />
+
+                <apex:outputField value="{!primaryBlock.Delivered_Library_Name__c}" />
+                <apex:outputField value="{!primaryBlock.Scheduled_Hand_Off_to_PM__c}" />
+
+                <apex:pageBlockSectionItem />
+                <apex:inputField value="{!primaryBlock.Tagging_Started__c}" />
+
+                <apex:outputField value="{!primaryBlock.ChangeFinder_Order__c}" />
+                <apex:inputField value="{!primaryBlock.Corrections_Started__c}" />
+
+                <apex:outputField value="{!primaryBlock.HCA_Feature_Mapping_Order__c}" />
+                <apex:inputField value="{!primaryBlock.Corrections_Complete__c}" />
+
+                <apex:pageBlockSectionItem />
+                <apex:inputField value="{!primaryBlock.Handed_Off_to_Project_Manager__c}" />
+
+                <apex:outputField value="{!primaryBlock.Est_Done_Flying_Plus_120__c}" />
+                <apex:inputField value="{!primaryBlock.Sent_to_3rd_Party_for_QC__c}" />
+
+                <apex:outputField value="{!primaryBlock.Scheduled_AT_Project_Due_Date__c}" />
+                <apex:inputField value="{!primaryBlock.SM_Tiles_Created__c}" />
+
+                <apex:inputField value="{!primaryBlock.Deliverable_Details_Requested__c}" />
+                <apex:inputField value="{!primaryBlock.Additional_Deliverables_Requested__c}" />
+
+                <apex:inputField value="{!primaryBlock.Deliverable_Details_Confirmed__c}" />
+                <apex:pageBlockSectionItem />
+
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="" collapsible="false" columns="1" showHeader="false" >
+                <apex:inputField value="{!primaryBlock.Production_Notes__c}" style="width: 100%" />
+                <apex:inputField value="{!primaryBlock.For_Future_Reference__c}" style="width: 100%"/>
+            </apex:pageBlockSection>
+
+            <apex:pageBlockSection title="Attachments" columns="1">
+                <apex:pageBlockTable value="{!attachments}" var="a" title="Attachments" style="width: 100%">
+                    <apex:column value="{!a.Name}" />
+                    <apex:column value="{!a.LastModifiedDate}" />
+                    <apex:column value="{!a.CreatedById}" />
+                </apex:pageBlockTable>
+                <apex:pageBlockSectionItem >
+                    <apex:outputPanel layout="block" style="padding-top: 15px;">
+                        <apex:actionRegion >
+                            <table>
+                                <tr>
+                                    <!--td><strong>File Name</strong></td>
+                                    <td><apex:inputField value="{!newAttachment.Name}" /></td-->
+                                    <td><strong>File</strong></td>
+                                    <td><apex:inputFile value="{!newAttachment.Body}"  fileName="{!newAttachment.Name}" /></td>
+                                    <td><apex:commandButton value="Add Attachment" action="{!addAttachment}" /></td>
+                                </tr>
+                            </table>
+                        </apex:actionRegion>
+                    </apex:outputPanel>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSection>
+
+            <apex:outputPanel layout="block" id="pnlIcbs">
+                <apex:actionRegion >
+                    <apex:actionFunction name="newPartial" action="{!addPartial}" reRender="pnlIcbs">
+                        <apex:param value="" name="blockId" assignTo="{!blockId}" />
+                    </apex:actionFunction>
+
+                    <apex:repeat value="{!blocks}" var="b">
+                        <apex:pageBlockSection title="Image Correction Block" collapsible="false" columns="2">
+                            <apex:outputField value="{!b.block.Name}" />
+                            <apex:inputField value="{!b.block.GeoTIFFs_Complete__c}" />
+
+                            <apex:inputField value="{!b.block.IC_Block_Description__c}" />
+                            <apex:inputField value="{!b.block.ECW_Complete__c}" />
+
+                            <apex:inputField value="{!b.block.Total_Tile_Count_1__c}" />
+                            <apex:inputField value="{!b.block.MrSID_Complete__c}" />
+
+                            <apex:inputField value="{!b.block.Block_Started__c}" />
+                            <apex:inputField value="{!b.block.Block_Complete__c}" />
+
+                            <apex:inputField value="{!b.block.Calculated_AT_Completion_Date__c}" />
+                            <apex:inputField value="{!b.block.Initial_Mosaic_ECW_Exported__c}" />
+                        </apex:pageBlockSection>
+                        <div style="padding: 0px 50px;">
+                            <apex:repeat value="{!b.partials}" var="p" >
+                                <apex:pageBlockSection title="{! 'Partial ' + TEXT(p.Partial__c)}" collapsible="true" columns="2">
+                                    <apex:inputField value="{!p.Partial__c}" />
+                                    <apex:inputField value="{!p.Total_Tiles__c}" />
+
+                                    <apex:inputField value="{!p.QC_Complete__c}" />
+                                    <apex:inputField value="{!p.Initial_Fixes_Complete__c}" />
+
+                                    <apex:inputField value="{!p.Review_Complete__c}" />
+                                    <apex:inputField value="{!p.Final_Fixes_Complete__c}" />
+                                </apex:pageBlockSection>
+                            </apex:repeat>
+                        </div>
+
+                        <apex:outputPanel layout="block" style="text-align: center;">
+                            <button type="button" onclick="newPartial('{!b.block.Id}');">Add Partial</button>
+                        </apex:outputPanel>
+                    </apex:repeat>
+                </apex:actionRegion>
+            </apex:outputPanel>
+
+            <apex:pageBlockButtons location="both">
+                <apex:commandButton value="Save" action="{!saveBlocks}"/>
+                <apex:commandButton value="Cancel" action="{!cancel}"/>
+            </apex:pageBlockButtons>
+        </apex:pageBlock>
+    </apex:form>
+
+    <script>
+        function twistSection(twisty) {
+            //twistSection code from salesforce.com
+            var parentDiv = twisty.parentNode;
+            //while (parentDiv.tagName != 'DIV') { parentDiv = parentDiv.parentNode; }
+            //var headerId = sectionId || (parentDiv.id.split('_'))[1];
+            var div = parentDiv.nextSibling;
+            var elemWasOn = false;
+            if (div.style.display != 'none')
+            {
+                div.style.display = 'none';
+                twisty.className ='showListButton';
+                twisty.alt = twisty.title = 'Show Section - '+twisty.name;
+                elemWasOn = true;
+            }
+            else
+            {
+                div.style.display = 'block';
+                twisty.className ='hideListButton';
+                twisty.alt = twisty.title = 'Hide Section - '+twisty.name;
+                elemWasOn = false;
+            }
+        }
+
+</script>
+</apex:page>

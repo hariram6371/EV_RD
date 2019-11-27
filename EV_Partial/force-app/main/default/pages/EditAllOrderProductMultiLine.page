@@ -1,0 +1,87 @@
+<apex:page standardController="Order_Product__c" extensions="EditAllOrderProductMultiLineCtrl" recordSetVar="oppProd">
+    <apex:form >
+        <apex:pageMessages id="showmsg"/>
+        
+        <script type="text/javascript">
+            function checkAll(cb,cbid) {
+                var inputElem = document.getElementsByTagName("input");
+                for(var i=0; i<inputElem.length; i++) {
+                     if(inputElem[i].id.indexOf(cbid)!=-1){                                        
+                        inputElem[i].checked = cb.checked;
+                    }
+                }
+            }
+        </script>
+        
+        <apex:pageBlock title="Edit Order Products" mode="edit" id="block1Id">
+            <apex:pageBlockButtons location="top">
+                <apex:commandButton value="Save" action="{!doSave}" id="saveButton"/>
+                <apex:commandButton value="Cancel" action="{!cancel}"/>
+            </apex:pageBlockButtons>
+            <apex:pageBlockButtons location="bottom">
+                <apex:commandButton value="Update" action="{!updatedata}" reRender="blockTable,showmsg,block1Id" id="updateButton"/>
+            </apex:pageBlockButtons>
+            
+            <apex:pageBlockSection columns="3">
+                <apex:pageblockSectionitem >
+                    <apex:outputLabel value="{!$ObjectType.Order_Product__c.fields.Ortho_Tile_Format__c.label}"/>
+                    <apex:selectList value="{!mosaicType}" id="filter" multiselect="true">
+                        <apex:selectOptions value="{!mosaicTypeList}"/>
+                    </apex:selectList>
+                </apex:pageblockSectionitem>
+                
+                <apex:inputField value="{!orderObj.Area_Wide_Mosaic_Type__c}"/>
+                <apex:inputField value="{!orderObj.Elevation_Data_Source__c}"/>
+                <apex:inputField value="{!orderObj.Coordinate_Group__c}"/>
+                <apex:inputField value="{!orderObj.Coordinate_Subsystem__c}"/>
+                <apex:inputField value="{!orderObj.Units__c}"/>
+                <apex:inputField value="{!orderObj.Datum__c}" rendered="{!(recordTypeName=='Imagery Order' || recordTypeName=='Imagery Order-Parent')}"/>
+                <apex:inputField value="{!orderObj.Horizontal_Datum__c}" rendered="{!(recordTypeName=='AccuPlus Order' || recordTypeName=='Accuplus Order-Parent')}"/>
+                <apex:inputField value="{!orderObj.Vertical_Datum__c}" rendered="{!(recordTypeName=='AccuPlus Order' || recordTypeName=='Accuplus Order-Parent')}"/>
+                
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+            
+        <apex:pageBlock mode="edit">
+            <apex:pageBlockTable value="{!prodWrapList}" var="prodWrap" id="blockTable">
+                <apex:column rendered="true">
+                    <apex:facet name="header">
+                        <apex:inputCheckbox onclick="checkAll(this,'checkedone')" value="{!chkBool}"/>
+                    </apex:facet>
+                    <apex:inputCheckbox value="{!prodWrap.isSelected}" id="checkedone"/>
+                </apex:column>
+                <apex:column value="{!prodWrap.prodObj.Deliverable_Name__c}"/>
+                <apex:column value="{!prodWrap.prodObj.Quantity_Purchased__c}" id="quantityId"/>
+                <apex:column headerValue="{!$ObjectType.Order_Product__c.fields.Ortho_Tile_Format__c.label}" id="orthoTitleId">
+                    <apex:outputfield value="{!prodWrap.prodObj.Ortho_Tile_Format__c}"/>
+                </apex:column>
+                <apex:column headerValue="{!$ObjectType.Order_Product__c.fields.Area_Wide_Mosaic_Type__c.label}" id="mosaicId">
+                    <apex:outputfield value="{!prodWrap.prodObj.Area_Wide_Mosaic_Type__c}"/>
+                </apex:column>
+                <apex:column headerValue="{!$ObjectType.Order_Product__c.fields.Coordinate_Group__c.label}" id="corGrpId">
+                    <apex:outputfield value="{!prodWrap.prodObj.Coordinate_Group__c}"/>
+                </apex:column>
+                <apex:column headerValue="{!$ObjectType.Order_Product__c.fields.Coordinate_Subsystem__c.label}" id="subSysId">
+                    <apex:outputfield value="{!prodWrap.prodObj.Coordinate_Subsystem__c}"/>
+                </apex:column>
+                <apex:column headerValue="{!$ObjectType.Order_Product__c.fields.Units__c.label}" id="unitId">
+                    <apex:outputfield value="{!prodWrap.prodObj.Units__c}"/>
+                </apex:column>
+                
+                <apex:column headerValue="{!$ObjectType.Order_Product__c.fields.Datum__c.label}" id="datumId" rendered="{!(recordTypeName=='Imagery Order' || recordTypeName=='Imagery Order-Parent')}">
+                    <apex:outputfield value="{!prodWrap.prodObj.Datum__c}"/>
+                </apex:column>
+                <apex:column headerValue="{!$ObjectType.Order_Product__c.fields.Horizontal_Datum__c.label}" id="horId" rendered="{!(recordTypeName=='AccuPlus Order' || recordTypeName=='Accuplus Order-Parent')}">
+                    <apex:outputfield value="{!prodWrap.prodObj.Horizontal_Datum__c}"/>
+                </apex:column>
+                <apex:column headerValue="{!$ObjectType.Order_Product__c.fields.Vertical_Datum__c.label}" id="vertId" rendered="{!(recordTypeName=='AccuPlus Order' || recordTypeName=='Accuplus Order-Parent')}">
+                    <apex:outputfield value="{!prodWrap.prodObj.Vertical_Datum__c}"/>
+                </apex:column>
+                <apex:column headerValue="{!$ObjectType.Order_Product__c.fields.Elevation_Data_Source__c.label}" id="dataId">
+                    <apex:outputfield value="{!prodWrap.prodObj.Elevation_Data_Source__c}" />
+                </apex:column>
+                <apex:inlineEditSupport event="ondblClick"  showOnEdit="saveButton"/>
+            </apex:pageBlockTable>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

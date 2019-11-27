@@ -1,0 +1,64 @@
+<!--
+ - Created by SentientGrey on 3/22/18.
+ -->
+
+<apex:page id="LiveAgentPostChat" showHeader="false">
+    <style>
+        .toolbar {height: 34px; background-color: #333;}
+        body{background-color: #F7F8F8;}
+        .container-logo {background-color: #fff;}
+        .main{padding: 10px;}
+        .col-label{font-weight: bold;}
+    </style>
+    <div class="toolbar">
+    </div>
+    <div class="container-logo">
+        <img src="{!$Resource.EagleViewLogoChat}" alt="logo" />
+    </div>
+    <div class="main">
+        <div id='details' class="main">
+            <!-- This will present all the post chat parameters available to this page -->
+            <p>
+                Please let us know how we did today by taking a short survey.
+                <input type="button" value="Take Survey" onclick="window.open('https://survey.clicktools.com/app/survey/go.jsp?iv=2v10czgl69etc', '_blank');" />
+            </p>
+            <p>
+                Feel free to download a transcript of your chat.
+                <input type="button" value="Download" onclick="save('chatTranscript.txt');"  />
+            </p>
+        </div>
+
+        <!-- Message to show if chat is abandoned -->
+        <div id='abandoned' style='display: none;'>
+            We are sorry you decided to leave the chat. Feel free to initiate a new session.
+        </div>
+    </div>
+    <!-- Code to decide if we show the abandoned block or the full data -->
+    <script type='text/javascript'>
+        var requestTime = '{!$CurrentPage.parameters.requestTime}';
+        var startTime = '{!$CurrentPage.parameters.startTime}';
+        // when startTime doesn't have a value, it means the chat never started
+        if (!startTime)
+        {
+              document.getElementById('details').style.display = 'none';
+              document.getElementById('abandoned').style.display = 'block';
+        }
+
+        function save(filename)
+        {
+            var blob = new Blob(['{!JSENCODE($CurrentPage.parameters.transcript)}'], {type: 'text/csv'});
+            if(window.navigator.msSaveOrOpenBlob) {
+                window.navigator.msSaveBlob(blob, filename);
+            }
+            else{
+                var elem = window.document.createElement('a');
+                elem.href = window.URL.createObjectURL(blob);
+                elem.download = filename;
+                document.body.appendChild(elem);
+                elem.click();
+                document.body.removeChild(elem);
+            }
+        }
+
+    </script>
+</apex:page>

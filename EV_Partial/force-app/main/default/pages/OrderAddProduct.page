@@ -1,0 +1,21 @@
+<apex:page standardController="Order_Product__c" recordSetVar="oppProd" extensions="addProductController">
+    <apex:form > 
+        <apex:pageBlock title="Add Order Product" mode="edit">
+            <apex:pageMessages />
+            <apex:pageBlockButtons location="top">
+                <apex:commandButton id="theBlock" value="Submit" action="{!addProducts}"/>
+                <apex:commandButton value="Cancel" action="{!cancel}"/>
+            </apex:pageBlockButtons>
+			Products to add to the Order(Select One):<br/><br/>
+            <apex:pageBlockTable value="{!childProducts}" var="o">
+				<apex:column width="35px">
+            		<apex:inputCheckbox value="{!o.checked}" />
+				</apex:column>
+				<apex:column width="800px" value="{!o.prod.Name}" headerValue="Product Name"/>
+				<apex:column headerValue="Quantity Purchased">
+					<apex:inputText value="{!o.quantity}" />
+				</apex:column>
+            </apex:pageBlockTable>  
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

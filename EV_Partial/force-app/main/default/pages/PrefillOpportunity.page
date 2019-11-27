@@ -1,0 +1,19 @@
+<apex:page standardController="Opportunity" extensions="PrefillOpportunityController" recordSetVar="items">
+	<apex:sectionHeader title="{!acct.Name}" subtitle="New Opportunity Record Type" />
+	<apex:form >
+		<apex:pageMessages escape="false"/> 
+		
+		<apex:pageBlock title="Select New Opportunity Record Type" mode="edit">
+			
+			<div style="padding: 20px 0px 0px 20px">
+				<apex:selectlist size="1" value="{!recTypeId}">
+	            	<apex:selectOptions value="{!RecordTypes}"/>
+	        	</apex:selectlist>
+        	</div>
+ 			<apex:pageBlockButtons location="both">
+				<apex:commandButton action="{!redirect}" value="Continue" />
+				<apex:commandButton action="{!cancel}" value="Cancel" />
+			</apex:pageBlockButtons>
+ 		</apex:pageBlock>
+	</apex:form>
+</apex:page>

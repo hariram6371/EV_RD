@@ -1,0 +1,58 @@
+<apex:page controller="OOPController" title="Eagleview Invoice Payment" showHeader="false" sidebar="false" standardStylesheets="false">  
+    <apex:composition template="OOPTemplate">
+        
+        <apex:define name="header">
+            <c:OOPHeader stepFile="" showLabel="INVOICE" />    
+        </apex:define>
+        
+        <apex:define name="body">           
+            <c:OOPOrderDetail OOP="{!oop}" showInst="false" isMiniSite="true" /> <!-- Opp body and lines -->
+
+            <apex:form id="oopForm">
+                <apex:outputPanel rendered="{!oppNotAvailable}">
+                    <apex:outputText styleclass="textHighlightWarning" value="{!oppNotAvailableLabel}" escape="false"></apex:outputText>
+                </apex:outputPanel>
+                
+                <apex:outputPanel rendered="{!!oppNotAvailable }">
+                    <table style="width:99%;"> 
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td style="text-align:right;width:150px;vertical-align:top;color:red;">
+                                <b>Payment Amount:</b><br />
+                                <div style="font-size:11px;">(including applicable taxes)</div>
+                            </td>
+                            <td style="text-align:right;width:100px;vertical-align:top;">
+                                $<apex:inputText value="{!miniPayAmount}" id="miniPay" required="true" style="width:70px;"></apex:inputText>
+                                
+                                <br /><br />
+                                <apex:commandButton action="{!refreshMiniPayment}" value="Pay Now" style="horizontal-align:right;text-align:right;" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <apex:outputText styleclass="textHighlightWarning" value="{!amountError}" escape="false"></apex:outputText>
+                            </td>
+                        </tr>
+                    </table>
+                </apex:outputPanel>
+            </apex:form>
+
+            <form id="payment_confirmation" action="{!cybersourceURL}" method="post">
+                <apex:outputPanel rendered="{!!oop.zeroAmount && oppNotAvailable == false && miniPayReady == true}" id="payCardPanel">
+                    
+                    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
+                      <script type="text/javascript">
+                        $(document).ready(function() {
+                          window.document.forms[1].submit();
+                        });
+                      </script>
+                    
+                    <apex:outputText value="{!viewCCData}" escape="false" rendered="false" />
+                    <apex:outputText value="{!formCCData}" escape="false" />
+                </apex:outputPanel>
+            </form>
+            <br /><br />
+            
+        </apex:define>
+    </apex:composition>
+</apex:page>

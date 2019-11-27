@@ -1,0 +1,23 @@
+<apex:page standardController="Opportunity" extensions="MiscOpportunityController">
+    <apex:form > 
+        <apex:pageBlock title="Amendment" mode="edit">
+            <apex:pageMessages />
+            <apex:pageBlockButtons location="top">
+                <apex:commandButton id="theBlock" value="Submit" action="{!updateAmendments}" disabled="{!OR(ISBLANK(opp.Amendment_Description__c), NOT(valid))}" />
+                <apex:commandButton value="Cancel" action="{!cancel}"/>
+            </apex:pageBlockButtons>
+			{!opp.Name} - {!opp.Type} - Amendment<br/><br/>
+			Enter a description of the amendment: 
+			<apex:inputField value="{!opp.Amendment_Description__c}">
+				<apex:actionSupport event="onchange" rerender="theBlock"/>
+			</apex:inputField>
+			<apex:outputField rendered="false" value="{!opp.Description}"/>
+            <apex:pageBlockTable value="{!childOpps}" var="o" rendered="{!NOT(childOppsEmpty)}">
+				<apex:column width="25px">
+            		<apex:inputCheckbox value="{!o.checked}" />
+				</apex:column>
+				<apex:column value="{!o.opp.Name}" headerValue="Opportunity Name"/>
+            </apex:pageBlockTable>  
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

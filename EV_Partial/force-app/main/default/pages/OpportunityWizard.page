@@ -1,0 +1,30 @@
+<apex:page standardController="Opportunity" extensions="OpportunityWizardController" tabStyle="Opportunity">
+	<apex:includeScript value="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" />
+	<h1>{!opp.Name}</h1>
+	
+	<apex:outputPanel rendered="{!NOT(errorMessage == null)}">
+		<div style="font-weight: bold; color: red; margin-top: 20px">
+			{!errorMessage}
+		</div>
+	</apex:outputPanel>
+	<apex:outputPanel rendered="{!errorMessage == null}">
+		<script type="text/javascript">
+			if( isLightningExperienceOrSalesforce1() ) 
+ 			{
+ 				sforce.one.navigateToURL('/apex/FlightWizard?id={!opp.Id}');
+ 			}
+ 			else
+ 			{
+ 				location.replace('/apex/FlightWizard?id=' + '{!opp.Id}');
+			}
+		
+			function isLightningExperienceOrSalesforce1() 
+			{
+    			return typeof sforce != 'undefined' && sforce && (!!sforce.one);
+			}
+		</script>
+	</apex:outputPanel>
+	<div style="margin-top: 20px">
+		<a href="/{!opp.Id}" >Return to opportunity</a>
+	</div>
+</apex:page>

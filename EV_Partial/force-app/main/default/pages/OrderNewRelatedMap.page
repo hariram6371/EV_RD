@@ -1,0 +1,25 @@
+<!--
+ - Created by SentientGrey on 12/6/16.
+ -->
+
+<apex:page id="OrderNewRelatedMap" standardController="Order__c" recordSetVar="map" extensions="OrderNewRelatedMapController">
+    <apex:form >
+        <!-- Page Header -->
+        <apex:sectionHeader title="New Map" subtitle="{!ord.Name}"/>
+
+        <apex:pageMessages />
+        <apex:pageBlock title="Details" mode="edit" id="page">
+            <!-- Save and Cancel Buttons -->
+            <apex:pageBlockButtons location="both" >
+                <apex:commandButton value="Save" action="{!saveMap}" />
+                <apex:commandButton value="Cancel" action="{!cancel}" />
+            </apex:pageBlockButtons>
+
+            <apex:pageBlockSection collapsible="false" columns="2" >
+                <apex:repeat value="{!$ObjectType.Order__c.FieldSets.Map_Record_Type_Fields}" var="f">
+                    <apex:inputField value="{!mapOrder[f]}" /><br/>
+                </apex:repeat>
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

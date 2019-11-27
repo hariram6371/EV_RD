@@ -1,0 +1,12 @@
+<!--
+ - Created by SentientGrey on 3/28/17.
+ -->
+
+<apex:page id="OrderActivation" standardController="Order__c" extensions="OrderActivationController" action="{!activate}">
+    <!-- Page Header -->
+    <apex:sectionHeader title="Activate" subtitle="{!Order__c.Name}"/>
+
+    <apex:pageBlock title="" mode="edit" id="page">
+        <apex:pageMessages />
+    </apex:pageBlock>
+</apex:page>

@@ -1,0 +1,2 @@
+<apex:page standardController="Order_Product__c" recordSetVar="oppProd" extensions="setOrderCompleteController" action="{!setOrderComplete}"> 
+</apex:page>

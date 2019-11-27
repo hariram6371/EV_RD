@@ -1,0 +1,181 @@
+<apex:page controller="OOPController" title="{!oop.currentStep.title}" showHeader="false" sidebar="false" standardStylesheets="false">
+    <apex:includeScript value="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js" />
+    <apex:composition template="OOPTemplate">
+
+        <apex:define name="header">
+            <c:OOPHeader stepFile="{!oop.currentStep.navImage}" />
+        </apex:define>
+        
+        <apex:define name="body">
+
+
+			<apex:outputPanel rendered="{!oppNotAvailable}">
+                <div class="textHighlight" style="text-align:left;">Billing Information</div>
+                
+                <table style="width:98%;horizontal-align:center;text-align: center;">
+                    <tr>
+                        <td style="width:100%;horizontal-align:center;text-align: center;">
+                            <div class="tableHighlight" style="width:100%;horizontal-align:center;text-align: center;">
+                                <br />
+                                <b>Order Total:&nbsp;
+                                <apex:outputText value="{0} {1, number, #,###,###.00}">
+                                    <apex:param value="{!oop.opportunity.CurrencyIsoCode}" />
+                                    <apex:param value="{!oop.opportunity.Amount}" />
+                                </apex:outputText>
+                                </b> 
+                                + applicable taxes
+                                <br /><br />
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+                <br /><br />
+				<apex:outputText styleclass="textHighlightWarning" value="{!oppNotAvailableLabel}" escape="false"></apex:outputText>
+				<br /><br />
+			</apex:outputPanel>
+			
+			
+            <apex:outputPanel id="wholeForm" rendered="{!!oppNotAvailable}">
+                <script type="text/javascript">
+                    var prevent = true;
+
+                    window.onbeforeunload = confirmExit;
+
+                    function confirmExit() {
+                        if (prevent) {
+                           return "Are you sure you want to close this page? Your account will not be activated unless you select a payment method.";
+                        }
+                    }
+
+                    function allowNavigation()
+                    {
+                        prevent = false;
+                    }
+                </script>
+
+                <apex:form id="oopForm">
+                    <apex:outputPanel rendered="{!oop.zeroAmount}">
+                        <b>Your invoice is {!oop.opportunity.CurrencyIsoCode} 0.00, and therefore no payment is required. Please click continue to complete your order.</b><br />
+
+                        <br />
+                        <div style="width:98%;horizontal-align:center;text-align: center;">
+                            <apex:commandButton action="{!oop.Previous}" value="Back" immediate="true" onClick="allowNavigation();"/>
+                            &nbsp;
+                            <apex:commandButton action="{!saveZeroAmount}" value="Continue" onClick="allowNavigation();" />
+                        </div>
+                    </apex:outputPanel>
+
+                    <apex:outputPanel id="payPanel" rendered="{!!oop.zeroAmount}">
+                        <apex:outputPanel id="usdPaymentOption" rendered="{!oop.opportunity.CurrencyIsoCode == 'USD'}">
+                            <p>Please select a payment method from the options below, and click the Submit button. <strong>Your account will not be activated unless you select a payment method.</strong></p>
+                            <table style="width:98%;">
+                                <tr>
+                                    <td>
+                                        <apex:selectRadio value="{!payMethod}" layout="pageDirection">
+                                            <apex:selectOption itemLabel="I would like an invoice, so I can pay by check." itemValue="payCheck"></apex:selectOption>
+                                            <apex:selectOption itemLabel="I would like to pay by credit card." itemValue="payCard"></apex:selectOption>
+                                            <apex:actionSupport event="onchange" rerender="wholeForm" status="" action="{!showPayMethod}" />
+                                        </apex:selectRadio>
+                                    </td>
+                                </tr>
+                            </table>
+                            <br />
+                            <apex:outputPanel rendered="{!payMethod == 'payCard'}">
+                                <div class="textHighlight" style="text-align:left;">Billing Information</div>
+
+                                <table style="width:98%;horizontal-align:center;text-align: center;">
+                                    <tr>
+                                        <td style="width:100%;horizontal-align:center;text-align: center;">
+                                            <div class="tableHighlight" style="width:100%;horizontal-align:center;text-align: center;">
+                                                <br />
+                                                <b>Order Total:&nbsp;
+                                                    <apex:outputText value="{0} {1, number, #,###,###.00}">
+                                                        <apex:param value="{!oop.opportunity.CurrencyIsoCode}" />
+                                                        <apex:param value="{!oop.opportunity.Amount}" />
+                                                    </apex:outputText>
+                                                </b>
+                                                + applicable taxes
+                                                <br /><br />
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </apex:outputPanel>
+                        </apex:outputPanel>
+
+                        <apex:outputPanel id="nonUsdPaymentOption" rendered="{!oop.opportunity.CurrencyIsoCode != 'USD'}">
+                            <p>To complete your purchase, please enter your email address and click the Submit button.</p>
+                        </apex:outputPanel>
+
+                        <apex:outputPanel rendered="{!payMethod == 'payCheck'}">
+                            <div class="textHighlight" style="text-align:left;">Billing Information</div>
+
+                            <table style="width:98%;horizontal-align:center;text-align: center;">
+                                <tr>
+                                    <td style="width:100%;horizontal-align:center;text-align: center;">
+
+                                        <div class="tableHighlight" style="width:100%;horizontal-align:center;text-align: center;">
+                                            <br />
+                                            <b>Order Total:&nbsp;
+                                                <apex:outputText value="{0} {1, number, #,###,###.00}">
+                                                    <apex:param value="{!oop.opportunity.CurrencyIsoCode}" />
+                                                    <apex:param value="{!oop.opportunity.Amount}" />
+                                                </apex:outputText>
+                                            </b>
+                                            + applicable taxes
+                                            <br /><br />
+                                            <div style="font-size:16px;">To receive an invoice, please enter a valid email address.</div>
+                                            <div style="padding: 20px 5px;">
+                                                Email Address:&nbsp;<apex:inputText value="{!receiptEmail}" id="email"></apex:inputText>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                            <br />
+                            <div style="width:98%;horizontal-align:center;text-align: center;">
+                                <script type="text/javascript">
+                                    function validateForm()
+                                    {
+                                        var pm = '{!payMethod}';
+                                        if(pm = 'payCheck')
+
+                                        var x = document.getElementById('{!$Component.email}').value;
+
+                                        var atpos=x.indexOf("@");
+                                        var dotpos=x.lastIndexOf(".");
+
+                                        if (atpos<1 || dotpos<atpos+2 || dotpos+2>=x.length){
+                                            alert("Please provide a valid e-mail address");
+                                            return false;
+                                        }
+
+                                        allowNavigation();
+                                        return true;
+                                    }
+                                </script>
+
+                                <apex:commandButton action="{!oop.Previous}" value="Back" immediate="true" onClick="allowNavigation();"/>
+                                &nbsp;
+                                <apex:commandButton action="{!payByCheck}" value="Submit" onclick="return validateForm()" />
+                            </div>
+                        </apex:outputPanel>
+                    </apex:outputPanel>
+                </apex:form>
+            
+                <form id="payment_confirmation" action="{!cybersourceURL}" method="post">
+                    <div style="width:98%;horizontal-align:center;text-align: center;">
+                        <apex:outputPanel rendered="{!payMethod == 'payCard' && !oop.zeroAmount}" style="font-weight:bold;horizontal-align:center;text-align:center;width:98%;text-align: center;" id="payCardPanel">
+                            <apex:outputText value="{!viewCCData}" escape="false" rendered="false" />
+                            <apex:outputText value="{!formCCData}" escape="false" />
+                            <br />
+                            <input type="button" id="back" value="Back" style="font-weight:bold;horizontal-align:center;text-align:center;" onclick="allowNavigation(); window.location = '/activate/ooptermsconditions?id={!oop.encryptedOppID}'" />
+                            &nbsp;
+                            <input type="submit" id="submit" value="Continue" style="font-weight:bold;horizontal-align:center;text-align:center;" onclick="allowNavigation();" />
+                        </apex:outputPanel>
+                    </div>
+                </form>
+            </apex:outputPanel>
+        </apex:define>
+    </apex:composition>
+</apex:page>

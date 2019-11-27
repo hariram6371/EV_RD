@@ -1,0 +1,39 @@
+<apex:page controller="OOPController" title="{!oop.currentStep.title}" showHeader="false" sidebar="false" standardStylesheets="false"> 
+
+    <apex:composition template="OOPTemplate">
+
+        <apex:define name="header">
+			<c:OOPHeader stepFile="{!oop.currentStep.navImage}" />  
+        </apex:define>
+        
+        <apex:define name="body">
+
+			<!-- Opp body and lines -->
+    		<c:OOPOrderDetail OOP="{!oop}" showInst="true" />
+			
+			<br /><br />
+			<apex:form id="oopForm">
+			<apex:outputPanel rendered="{!!oppNotAvailable}">
+				<br /><br />
+				<div style="width:98%;horizontal-align:center;text-align: center;">
+					<apex:commandButton action="{!oop.Previous}" disabled="{!NOT(oop.hasPrevious)}" value="Back" immediate="true"/>
+					&nbsp;
+					<apex:commandButton action="{!oop.Next}" disabled="{!NOT(oop.hasNext)}" value="Next" />				    
+				</div >
+			</apex:outputPanel>
+
+			<apex:outputPanel rendered="{!oppNotAvailable}">
+				<apex:outputText styleclass="textHighlightWarning" value="{!oppNotAvailableLabel}"></apex:outputText>
+				<br /><br />
+				<div style="width:98%;horizontal-align:center;text-align: center;">
+					<apex:commandButton value="Export PDF" onclick="window.open('/activate/OOPReviewPDF?id={!oop.encryptedOppID}', '_blank'); return false;" rendered="{!oop.opportunity.Paid__c}" />	
+					
+				</div >
+			</apex:outputPanel>
+			</apex:form>
+			<br /><br /><br /><br />
+			
+        </apex:define>
+    </apex:composition>
+    
+</apex:page>

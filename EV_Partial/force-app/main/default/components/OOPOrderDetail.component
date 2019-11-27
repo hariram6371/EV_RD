@@ -1,0 +1,114 @@
+<apex:component >
+    <apex:attribute name="OOP" description="OOPHandler class instance." type="OOPHandler" required="true"/>
+    <apex:attribute name="showInst" description="Show the special instructions." type="Boolean" required="true"/>
+    <apex:attribute name="isPDF" description="Is the component being rendered as PDF" type="Boolean" required="false" default="false" />
+    <apex:attribute name="isMiniSite" description="Called from the mini-payment site" type="Boolean" required="false" default="false" />
+	<apex:attribute name="isConfPage" description="Called from the confirmation page" type="Boolean" required="false" default="false" />
+
+	<apex:variable var="c" value="{!IF(isPDF=true,'font-family: sans-serif;font-size:14px;','')}" />
+
+	<table style="width:98%;{!c}">
+		<tr>
+			<td style="width:50%;{!c}">
+				<div class="textHighlight">Bill To:</div>
+				<apex:outputPanel rendered="{!ISBLANK(oop.billTo)}">
+					<div class="tableHighlight" style="{!c}">
+					{!oop.opportunity.Account.Name}<br />
+					{!oop.opportunity.Account.BillingStreet}<br />
+					{!oop.opportunity.Account.BillingCity}, {!oop.opportunity.Account.BillingState} {!oop.opportunity.Account.BillingPostalCode}							
+					</div>					
+				</apex:outputPanel>
+				<apex:outputPanel rendered="{!!ISBLANK(oop.billTo)}">
+					<div class="tableHighlight" style="{!c}">
+					{!oop.billTo.Account.Name}<br />
+					{!oop.billTo.MailingStreet}<br />
+					{!oop.billTo.MailingCity}, {!oop.billTo.MailingState} {!oop.billTo.MailingPostalCode}							
+					</div>
+				</apex:outputPanel>
+			</td>
+			<td style="width:50%;horizontal-align:right;text-align: right;{!c}">
+				<b>Date:</b> <apex:outputText value=" {!oop.todayDate}" />
+				<br /><br />
+				<b>Account Executive:</b> {!oop.opportunity.Owner.Name}
+			</td>
+		</tr>
+	</table>
+	
+	<br /><br />
+	
+	<div class="datagrid">
+    <apex:DataTable value="{!oop.oppLines}" var="item" width="100%" style="{!c}" >   
+        <apex:column value="{!item.Quantity}" headerValue="Qty" style="{!c}" />
+        <apex:column headerValue="Item/Description" style="{!c}">
+        	<b>{!item.Product2.Name}</b><br />
+        	<apex:outputText value="{!item.Product2.Description}" style="font-size:12px;" rendered="{!!isMiniSite}" />
+        	<apex:outputText value="{!item.Description}" style="font-size:12px;" rendered="{!isMiniSite}" />
+        	<br /><br />
+        </apex:column> 
+        <apex:column headerValue="Unit Price" width="125px;" style="text-align:right;{!c}">
+       		<apex:outputText value="{0} {1, number, #,###,##0.00}" rendered="{!!oop.zeroAmount}">
+				<apex:param value="{!item.CurrencyIsoCode}" />
+				<apex:param value="{!item.Regular_Unit_Price__c}" />
+            </apex:outputText>
+       		<apex:outputText value="{0} 0.00" rendered="{!oop.zeroAmount}">
+				<apex:param value="{!item.CurrencyIsoCode}" />
+			</apex:outputText>
+        </apex:column>
+        <apex:column headerValue="Total Discount" width="75px;" style="text-align:right;{!c}" value="{!item.Total_Discount__c}">
+        </apex:column>
+        <apex:column headerValue="Ext. Price" width="150px;" style="text-align:right;{!c}">
+       		<apex:outputText value="{0} {1, number, #,###,###.00}" rendered="{!!oop.zeroAmount}">
+				<apex:param value="{!item.CurrencyIsoCode}" />
+            	<apex:param value="{!item.TotalPrice}" />
+            </apex:outputText>
+            <apex:outputText value="{0} 0.00" rendered="{!oop.zeroAmount}">
+				<apex:param value="{!item.CurrencyIsoCode}" />
+			</apex:outputText>
+        </apex:column>
+    </apex:DataTable> 
+    </div>
+    
+    <br />
+    
+	<table style="width:98%;vertical-align:top;{!c}">
+		<tr>
+			<td style="vertical-align:top;{!c}">
+				<apex:outputPanel rendered="{!!isMiniSite}">
+				<b>License Term: {!oop.licenseTerm}</b>
+				<br />
+				<apex:outputText rendered="{!oop.geoFences != ''}">
+    				<b>Imagery: </b> {!oop.geoFences}
+    			</apex:outputText> 
+    			</apex:outputPanel>
+			</td>
+			<td style="text-align:right;width:250px;vertical-align:top;{!c}">
+				<b>Total:</b>&nbsp;&nbsp;
+				<apex:outputText value="{0} {1, number, #,###,###.00}" rendered="{!!oop.zeroAmount}">
+					<apex:param value="{!oop.opportunity.CurrencyIsoCode}" />
+    				<apex:param value="{!oop.opportunity.Amount}" />
+    			</apex:outputText> 
+            	<apex:outputText value="{0} 0.00" rendered="{!oop.zeroAmount}">
+					<apex:param value="{!oop.opportunity.CurrencyIsoCode}" />
+				</apex:outputText>
+				<div style="font-size:11px;">(+ applicable taxes)</div>
+			</td>
+		</tr>
+	</table>
+	
+    <br /><br />
+    <apex:outputPanel rendered="{!oop.opportunity.License_Agreement_Modifications__c <> null && isMiniSite = false && isConfPage = false}">
+	<table style="width:98%;">
+		<tr>
+			<td>
+				<div class="textHighlight">Non-Standard Terms and Conditions:</div>
+				<div class="tableHighlight">
+					 <apex:outputText value="{!oop.opportunity.License_Agreement_Modifications__c}" escape="false" style="{!c}" />
+				</div>
+			</td>
+		</tr>
+	</table>
+	</apex:outputPanel>
+	
+	
+	<div class="page-break"></div>
+</apex:component>

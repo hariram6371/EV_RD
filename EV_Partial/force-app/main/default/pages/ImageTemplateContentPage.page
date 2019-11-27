@@ -1,0 +1,17 @@
+<apex:page showHeader="false" sidebar="false" cache="false" contentType="text/xml" controller="ImageTemplateContentController">
+    <block>
+        <table table-layout="fixed" width="100%" border-top-style="solid" border-bottom-style="solid" border-left-style="solid" border-right-style="solid">
+            <table-body>
+                <apex:repeat var="image" value="{!imageUrl}">
+                    <table-row>
+                        <table-cell display-align="center" border-top-style="solid" border-bottom-style="solid" border-left-style="solid" border-right-style="solid">
+                            <block text-align="center">
+                                <external-graphic src="{!image}" content-height="300" content-width="300" content-type="image/jpeg"/>
+                            </block>
+                        </table-cell>
+                    </table-row>
+                </apex:repeat>
+            </table-body>
+        </table>
+    </block>
+</apex:page>

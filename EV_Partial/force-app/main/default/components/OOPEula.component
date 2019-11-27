@@ -1,0 +1,18 @@
+<apex:component >
+    <apex:attribute name="OOP" description="OOPHandler class instance." type="OOPHandler" required="true"/>
+    <apex:attribute name="clearStyles" description="Clear fonts out (for PDF export)" type="string" required="false" default="false" />
+
+    <table style="width:98%;">
+        <tr>
+            <td colspan="2">
+                <apex:repeat value="{!oop.eulas}" var="e">
+                    <div class="tableHighlight" style="font-size:12px;font-family: myriad-pro, Myriad, Helvetica, Arial;{!IF(clearStyles='false','height:600px; overflow:auto;background: #f2f2f2;','')}">
+                    <apex:outputText value="{!e.EULA_Text__c}" escape="false" />
+                    </div>
+                    <br /><br />
+                    <div class="page-break"></div>
+                </apex:repeat>
+            </td>
+        </tr>
+    </table>
+</apex:component>

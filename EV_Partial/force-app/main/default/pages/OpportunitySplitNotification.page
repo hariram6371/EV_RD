@@ -1,0 +1,34 @@
+<!--
+ - Created by SentientGrey on 11/16/16.
+ -->
+
+<apex:page id="OpportunitySplitNotification" standardController="Opportunity" extensions="OpportunitySplitNotificationController">
+    <style>
+        .overlay {position: fixed; top: 0; left: 0; height: 100%; width: 100%; z-index: 100; background-color: rgba(0,0,0,0.5);}
+        .white-box{width: 300px; position: fixed; top: 50%; left: 50%; margin-top: -100px; margin-left: -150px;
+                        background-color: #FFFFFF; border-radius: 5px; text-align: center; z-index: 101; padding-top: 50px; padding-bottom: 50px;}
+        .white-box img{}
+        #loadingLabel{font-weight: bold; color: red;}
+    </style>
+    <apex:outputPanel rendered="{!standalone}">
+        <div id="overlay">
+            <div class="overlay">
+            </div>
+            <div class="white-box">
+                <img src="/img/loading.gif" />&nbsp;
+                <span id="loadingLabel">Processing {!Opportunity.Name}</span>
+                Split Datetime: <apex:outputField value="{!Opportunity.Opportunity_Split_Date__c}" /><br/>
+                Split Amount: <apex:outputText value="{!Opportunity.Opportunity_Split_Amount__c}" /><br/>
+                Parent Amount: <apex:outputText value="{!Opportunity.Parent_Amount__c}" /><br/>
+            </div>
+        </div>
+        <script type="text/javascript">
+            setTimeout(function(){ parent.window.location = '/apex/OpportunitySplitNotification?id={!Opportunity.Id}&standalone=true'}, 5000);
+        </script>
+    </apex:outputPanel>
+    <apex:outputPanel rendered="{!OR((display && NOT(standalone)), (NOT(display) && standalone))}" >
+        <script type="text/javascript">
+            parent.window.location = '{!redirectLink}';
+        </script>
+    </apex:outputPanel>
+</apex:page>

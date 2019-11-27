@@ -1,0 +1,20 @@
+<!--
+ - Created by SentientGrey on 1/15/18.
+ -->
+
+<apex:page id="PromoCodeReqGenerateCodes" standardController="Promo_Code_Request__c" extensions="PromoCodeReqGenerateCodesController" action="{!generateCodes}">
+    <apex:form >
+        <!-- Page Header -->
+        <apex:sectionHeader title="Generate Promo Codes" subtitle="{!record.Name}"/>
+
+        <apex:pageBlock title="" mode="edit" id="page">
+            <!-- Back Buttons -->
+            <apex:pageBlockButtons location="both" >
+                <apex:commandButton value="Back" action="{!cancel}" />
+            </apex:pageBlockButtons>
+
+            <apex:pageMessages />
+        </apex:pageBlock>
+
+    </apex:form>
+</apex:page>

@@ -1,0 +1,25 @@
+<!--
+ - Created by SentientGrey on 11/12/16.
+ -->
+
+<apex:page id="CaptureOrderAssociateCapture" standardController="Capture_Order_Junction__c" recordSetVar="captureOrders" extensions="CaptureOrderAssociateCaptureController">
+    <apex:form >
+        <!-- Page Header -->
+        <apex:sectionHeader title="Associate Capture" subtitle="{!ord.Name}"/>
+
+        <apex:pageMessages />
+
+        <apex:pageBlock title="Details" mode="edit" id="page">
+            <!-- Save and Cancel Buttons -->
+            <apex:pageBlockButtons location="both" >
+                <apex:commandButton value="Save" action="{!saveCapture}" />
+                <apex:commandButton value="Cancel" action="{!cancel}" />
+            </apex:pageBlockButtons>
+
+            <apex:pageBlockSection collapsible="false" columns="2" >
+                <apex:outputField value="{!junction.Order__c}" />
+                 <apex:inputField value="{!junction.Capture__c}" required="true" />
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

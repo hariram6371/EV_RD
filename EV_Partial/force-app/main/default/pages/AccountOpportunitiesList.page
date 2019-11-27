@@ -1,0 +1,49 @@
+<apex:page showHeader="false" sidebar="false" standardController="Account" extensions="AccountOpportunitiesListController">
+    <apex:includeScript value="https://code.jquery.com/jquery-2.2.4.min.js"/>
+    <apex:includeScript value="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.28.1/js/jquery.tablesorter.js"/>
+    <style type="text/css">
+        th.tablesorter-headerUnSorted {
+        background-image: url('https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.28.3/css/images/black-unsorted.gif') !important;
+        background-repeat: no-repeat !important;
+        background-position: center right !important;
+        padding: 4px 18px 4px 4px !important;
+		white-space: normal !important;
+        cursor: pointer;
+        }
+        th.tablesorter-headerAsc {
+        background-image: url('https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.28.3/css/images/black-asc.gif') !important;
+        background-repeat: no-repeat !important;
+        background-position: center right !important;
+        padding: 4px 18px 4px 4px !important;
+		white-space: normal !important;
+        cursor: pointer;
+        }
+        th.tablesorter-headerDesc {
+        background-image: url('https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.28.3/css/images/black-desc.gif') !important;
+        background-repeat: no-repeat !important;
+        background-position: center right !important;
+        padding: 4px 18px 4px 4px !important;
+		white-space: normal !important;
+        cursor: pointer;
+        }
+    </style>
+    <script>
+    $(document).ready(function(){
+        $("table").tablesorter({  
+            // Initial sort on column 'initialSortColumn', descending
+            sortList: [[{!initialSortColumn},1]]
+        });
+    });
+    </script>
+    
+    <apex:pageBlock title="Opportunities (No Self Service)">
+        <apex:pageBlockTable value="{!oppsToDisplay}" var="opp">
+            <apex:column headerValue="Opportunity Name">
+                <apex:outputLink value="/{!opp.Id}" target="_top">{!opp.Name}</apex:outputLink>
+            </apex:column>
+            <apex:repeat value="{!fieldsToDisplay}" var="field">
+                <apex:column value="{!opp[field]}"/>
+            </apex:repeat>
+        </apex:pageBlockTable>
+    </apex:pageBlock>
+</apex:page>

@@ -1,0 +1,7 @@
+<!--
+ - Created by SentientGrey on 10/19/16.
+ -->
+
+<apex:page id="OpportunityUndoParent" standardController="Opportunity" extensions="OpportunityUndoParentController" action="{!convertToSingleOpp}">
+    <apex:pageMessages />
+</apex:page>

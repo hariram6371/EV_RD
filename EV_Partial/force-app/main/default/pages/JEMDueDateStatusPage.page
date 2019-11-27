@@ -1,0 +1,15 @@
+<apex:page standardController="Order__c" extensions="jemOrderController" action="{!runJEM}">
+	<apex:form >
+		<apex:outputPanel id="pageblock">
+		<div style="font-size:28px;">
+			<table align="center" valign="center" border="1px" >
+			<tr>
+				<td style="padding: 4px 8px;"><h1>{!status}</h1></td>
+				<td style="padding: 4px 8px; background-color:{! color};"><h1>{!days}</h1></td>
+				<td style="padding: 4px 8px;"><h1>day{!IF(days == '1', '', 's')}</h1></td>
+			</tr>
+			</table>
+		</div>
+		</apex:outputPanel>
+	</apex:form>
+</apex:page>

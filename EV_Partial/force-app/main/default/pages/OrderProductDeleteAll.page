@@ -1,0 +1,35 @@
+<apex:page standardController="Order_Product__c" extensions="OrderProductDeleteAllController" recordSetVar="ordProd">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script> 
+	<style>
+		.message .messageText a
+		{margin: 0; font-size: 100%;}
+	</style>
+	<apex:form >
+    	<apex:pageMessages escape="false"/> 
+    	
+    	<apex:pageBlock title="Order Products" mode="detail">
+    		<apex:pageBlockButtons location="both" rendered="{!hasProducts}">
+                <apex:commandButton value="Delete" action="{!deleteProducts}" />
+                <apex:commandButton value="Cancel" action="{!cancel}"/>
+            </apex:pageBlockButtons>
+            <apex:pageBlockTable value="{!orderProducts}" var="op">
+                <apex:column rendered="true">
+                    <apex:facet name="header">
+                        <apex:inputCheckbox onclick="checkAll(this);" />
+                    </apex:facet>
+                    <apex:inputCheckbox value="{!op.isSelected}" />
+                </apex:column>
+                <apex:column value="{!op.prodObj.Name}"/>
+                <apex:column value="{!op.prodObj.Deliverable_Name__c}"/>
+                <apex:column value="{!op.prodObj.Quantity_Purchased__c}"/>
+                <apex:column value="{!op.prodObj.Ortho_Tile_Format__c}"/>
+            </apex:pageBlockTable>
+        </apex:pageBlock>
+    </apex:form>
+    <script type="text/javascript">
+    	function checkAll(cba)
+    	{
+    		$("input:checkbox").prop('checked', $(cba).prop("checked"));
+    	}
+    </script>
+</apex:page>

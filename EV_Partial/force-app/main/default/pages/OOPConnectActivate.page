@@ -1,0 +1,87 @@
+<apex:page controller="OOPController" sidebar="false">
+    
+    
+    <apex:pageBlock title="{!cAct.opp.Name}">
+        <!--<apex:outputText escape="true" value="Event Type: {!cAct.eventType}" />-->
+        <br /><br />
+    </apex:pageBlock>
+    
+    <!--
+    <apex:pageBlock title="Get Orgs">
+        <apex:outputText escape="true" value="{!cAct.lnkOrgs}" />
+        <br /><br />
+        <apex:outputText escape="true" value="{!cAct.jsonOrgs}" />
+        <br /><br />
+    </apex:pageBlock>
+
+    <apex:pageBlock title="Get Users">
+        <apex:outputText escape="true" value="{!cAct.lnkUser}" />
+        <br /><br />
+        <apex:outputText escape="true" value="{!cAct.jsonUser}" />
+        <br /><br />
+        Has User:&nbsp; <apex:outputText escape="true" value="{!cAct.hasUser}" />
+    </apex:pageBlock>
+    
+    <apex:pageBlock title="Create Org">
+        <apex:outputText escape="true" value="{!cAct.lnkNewOrg}" />
+        <br /><br />
+        <apex:outputText escape="true" value="{!cAct.jsonNewOrg}" />
+    </apex:pageBlock>  
+
+    <apex:pageBlock title="Set Org App Rights">
+        <apex:outputText escape="true" value="{!cAct.lnkSetOrgAppRights}" />
+        <br /><br />
+        <apex:outputText escape="true" value="{!cAct.jsonSetOrgAppRights}" />
+    </apex:pageBlock> 
+
+    <apex:pageBlock title="Set GeoFences">
+        <apex:outputText escape="true" value="{!cAct.lnkSetGeoFences}" />
+        <apex:outputText escape="true" value="{!cAct.gfIds}" />
+        <br /><br />
+        <apex:outputText escape="true" value="{!cAct.jsonSetGeoFences}" />
+    </apex:pageBlock>     
+
+    <apex:pageBlock title="Set Expiration Date">
+        <apex:outputText escape="true" value="{!cAct.lnkSetExpirationDate}" />
+        <br /><br />
+        <apex:outputText escape="true" value="{!cAct.jsonSetExpirationDate}" />
+    </apex:pageBlock> 
+
+    <apex:pageBlock title="Enable GIS Config">
+        <apex:outputText escape="true" value="{!cAct.lnkEnableGISConfig}" />
+        <br /><br />
+        <apex:outputText escape="true" value="{!cAct.jsonEnableGISConfig}" />
+    </apex:pageBlock>  
+
+    <apex:pageBlock title="Create User">
+        <apex:outputText escape="true" value="{!cAct.lnkCreateUser}" />
+        <br /><br />
+        <apex:outputText escape="true" value="{!cAct.jsonCreateUser}" />
+    </apex:pageBlock> 
+
+    <apex:pageBlock title="Set Number of Users">
+        <apex:outputText escape="true" value="{!cAct.lnkSetNumberOfUsers}" />
+        <br /><br />
+        <apex:outputText escape="true" value="{!cAct.jsonSetNumberOfUsers}" />
+    </apex:pageBlock> 
+    
+    <apex:pageBlock title="Activate Layer Set">
+        <apex:outputText escape="true" value="{!cAct.lnkActivateLayerSet}" />
+        <br /><br />
+        <apex:outputText escape="true" value="{!cAct.jsonActivateLayerSet}" />
+    </apex:pageBlock> 
+    
+    <apex:pageBlock title="Create Access Control Label">
+        <apex:outputText escape="true" value="{!cAct.lnkCreateAccessCtrl}" />
+        <br /><br />
+        <apex:outputText escape="true" value="{!cAct.jsonCreateAccessCtrl}" />
+    </apex:pageBlock> 
+    
+    <apex:pageBlock title="Add Allow Access Control Label">
+        <apex:outputText escape="true" value="{!cAct.lnkAddAllowAccessCtrl}" />
+        <br /><br />
+        <apex:outputText escape="true" value="{!cAct.jsonAddAllowAccessCtrl}" />
+    </apex:pageBlock> 
+    -->
+    <br /><br />
+</apex:page>

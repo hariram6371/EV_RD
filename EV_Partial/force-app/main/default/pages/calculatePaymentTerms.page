@@ -1,0 +1,4 @@
+<apex:page cache="false" expires="0" standardController="Opportunity" extensions="calculatePaymentTermsController" action="{!calculatePaymentTerms}">
+    <apex:pageMessages />
+    <apex:detail />
+</apex:page>

@@ -1,0 +1,62 @@
+<apex:page showHeader="false" sidebar="false" cache="false" contentType="text/xml" controller="QuoteLineTemplateContentController" >
+    <block>
+        <table width="100%">
+            <table-body border-top-style="solid" border-bottom-style="solid" border-left-style="solid" border-right-style="solid" background-color="rgb(204, 204, 204)">
+                <table-row text-align="center">
+                    <table-cell>
+                        <block font-size="16" text-decoration="underline" color="#000033">
+
+                            <apex:outputText value="Multi-Project Summary" rendered="{!projectCount > 1}"/>
+                            <apex:outputText value="Single Project Summary" rendered="{!projectCount == 1}"/>
+                        </block>
+                        <block font-size="10" color="#000033">
+                            <apex:outputText value="{!projectCount} Projects over {!quoteLineGroupList[0].SBQQ__Quote__r.Contract_Term__c} year(s)" rendered="{!projectCount > 1}"/> 
+                            <apex:outputText value="{!projectCount} Project over {!quoteLineGroupList[0].SBQQ__Quote__r.Contract_Term__c} year(s)" rendered="{!projectCount = 1}"/> 
+                        </block>
+                        <block>
+                            <table>
+                            <table-body>
+                            
+                                <table-row>
+                                    <apex:repeat var="group" value="{!quoteLineGroupList}">
+                                    <table-cell>
+                                        <block>
+                                            <apex:outputText value="&#160;" />
+                                        </block>
+                                        <block font-size="12" text-align="left" color="#000033" padding-left="3" padding-bottom="3">
+                                            <apex:outputText value="{!group.Name} Total: " />
+                                            <apex:outputText value="{0, number, currency}" >
+                                                <apex:param value="{!group.SBQQ__NetTotal__c}"/>
+                                            </apex:outputText>
+                                        </block>
+                                        <apex:outputPanel layout="none" rendered="{!quote.Annual_Payments__c}">
+                                            <block font-size="12" text-align="left" color="#000033" padding-left="3" padding-bottom="3">
+                                                <apex:outputText value="Annual Payments: {0, number, currency}" >
+                                                    <apex:param value="{!group.Annual_Payment__c}"/>
+                                                </apex:outputText>
+                                            </block>
+                                        </apex:outputPanel>
+                                    </table-cell>
+                                    </apex:repeat>
+                                </table-row>
+                                <apex:outputPanel layout="none" rendered="{!quote.Annual_Payments_per_Contract__c}">
+                                    <table-row>
+                                        <table-cell>
+                                            <block font-size="12" text-align="left" color="#000033" padding-left="3" padding-bottom="3">
+                                                <apex:outputText value="Annual Payments: {0, number, currency}" >
+                                                    <apex:param value="{!quote.Annual_Payment__c}"/>
+                                                </apex:outputText>
+                                            </block>
+                                        </table-cell>
+                                    </table-row>
+                                </apex:outputPanel>
+
+                            </table-body>
+                            </table>
+                        </block>
+                    </table-cell>
+                </table-row>
+            </table-body>
+        </table>
+    </block>
+</apex:page>

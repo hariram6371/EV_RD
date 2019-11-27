@@ -1,0 +1,152 @@
+<!--
+ - Created by SentientGrey on 3/21/18.
+ -->
+
+<apex:page id="LiveAgentPreChat" showHeader="false">
+    <style>
+        .toolbar {height: 34px; background-color: #333;}
+        body{background-color: #F7F8F8;}
+        .container-logo {background-color: #fff;}
+        .main{padding: 10px;}
+        .col-label{font-weight: bold;}
+    </style>
+    <!-- This script takes the endpoint URL parameter passed from the deployment page and makes it the action for the form -->
+    <script type='text/javascript'>
+        (function()
+        {
+            function handlePageLoad()
+            {
+                var endpointMatcher = new RegExp("[\\?\\&]endpoint=([^&#]*)");
+                document.getElementById('prechatForm').setAttribute('action',
+                decodeURIComponent(endpointMatcher.exec(document.location.search)[1].replace("javascript:", "")));
+            }
+
+            if (window.addEventListener)
+            {
+                window.addEventListener('load', handlePageLoad, false);
+            }
+            else
+            {
+                window.attachEvent('onload', handlePageLoad, false);
+            }
+        })();
+    </script>
+
+    <div class="toolbar">
+    </div>
+    <div class="container-logo">
+        <img src="{!$Resource.EagleViewLogoChat}" alt="logo" />
+    </div>
+    <div class="main">
+        <form method='post' id='prechatForm'>
+            <table>
+                <tr>
+                    <td class="col-label">
+                        Name
+                    </td>
+                    <td>
+                        <input type="text" name="liveagent.prechat.name" id="prechat_field_name" />&nbsp;<span style="color: red; display: none;" id="nameRequired">Required field</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-label">
+                        Account Email
+                    </td>
+                    <td>
+                        <input type="text" name="liveagent.prechat:ContactEmail" id="email" />&nbsp;<span style="color: red; display: none;" id="emailRequired">Required field</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-label">I do not have an account</td>
+                    <td><input type="checkbox" id="hasAccount" /></td>
+                </tr>
+                <tr>
+                    <td class="col-label">Report Number</td>
+                    <td><input type="text" name="liveagent.prechat:OppReportId" id="reportNumber" /></td>
+                </tr>
+                <tr>
+                    <td class="col-label">Case Number</td>
+                    <td><input type="text" name="liveagent.prechat:CaseNumber" id="caseNumber" /></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><input type='submit' value='Chat Now' id='prechat_submit' onclick="return validateForm(); setName();" /></td>
+                </tr>
+            </table>
+
+
+            <!-- map: Use the data from prechat form to map it to the Salesforce record's fields -->
+            <input type="hidden" name="liveagent.prechat.findorcreate.map:Contact" value="Email,ContactEmail" />
+            <input type="hidden" name="liveagent.prechat.findorcreate.map:Case" value="CaseNumber,CaseNumber" />
+            <input type="hidden" name="liveagent.prechat.findorcreate.map:Opportunity" value="Report_ID__c,OppReportId" />
+
+            <!-- doFind, doCreate and isExactMatch example for a Contact:
+                Find a contact whose Email exactly matches the value provided by the customer in the form
+                If there's no match, then create a Contact record and set it's First Name, Last Name, Email, and Phone to the values provided by the customer -->
+            <input type="hidden" name="liveagent.prechat.findorcreate.map.doFind:Contact" value="Email,true" />
+            <input type="hidden" name="liveagent.prechat.findorcreate.map.isExactMatch:Contact" value="Email,true" />
+
+            <input type="hidden" name="liveagent.prechat.findorcreate.map.doFind:Case" value="CaseNumber,true" />
+            <input type="hidden" name="liveagent.prechat.findorcreate.map.isExactMatch:Case" value="CaseNumber,true" />
+
+            <input type="hidden" name="liveagent.prechat.findorcreate.map.doFind:Opportunity" value="Report_ID__c,true" />
+            <input type="hidden" name="liveagent.prechat.findorcreate.map.isExactMatch:Opportunity" value="Report_ID__c,true" />
+
+
+            <!-- showOnCreate: Open the Contact and Case records as sub-tabs to the chat for the agent in the Console -->
+            <input type="hidden" name="liveagent.prechat.findorcreate.showOnCreate:Contact" value="true" />
+            <input type="hidden" name="liveagent.prechat.findorcreate.showOnCreate:Case" value="true" />
+            <input type="hidden" name="liveagent.prechat.findorcreate.showOnCreate:Opportunity" value="true" />
+
+            <!-- saveToTranscript: Associates the records found / created, i.e. Contact and Case, to the Live Chat Transcript record. -->
+            <input type="hidden" name="liveagent.prechat.findorcreate.saveToTranscript:Contact" value="ContactId" />
+            <input type="hidden" name="liveagent.prechat.findorcreate.saveToTranscript:Case" value="CaseId" />
+
+            <!-- Used to set the visitor's name for the agent in the Console -->
+            <!--input type="hidden" name="liveagent.prechat.name" id="prechat_field_name" /-->
+
+            <!-- Set the visitor's name for the agent in the Console to first and last name provided by the customer -->
+            <script type="text/javascript">
+                function validateForm()
+                {
+                    var isValid = true;
+                    var name = document.getElementById('prechat_field_name').value;
+                    var email = document.getElementById('email').value;
+                    var hasAccount = document.getElementById('hasAccount').checked;
+
+                    if(name == '')
+                    {
+                        document.getElementById('nameRequired').style.display = 'block';
+                        isValid = false;
+                    }
+                    else
+                    {
+                        document.getElementById('nameRequired').style.display = 'none';
+                    }
+
+                    if(email == '' && !hasAccount)
+                    {
+                        document.getElementById('emailRequired').style.display = 'block';
+                        isValid = false;
+                    }
+                    else
+                    {
+                        document.getElementById('emailRequired').style.display = 'none';
+                    }
+
+                    return isValid;
+                }
+
+                function setName()
+                {
+                    //document.getElementById("prechat_field_name").value = document.getElementById("name").value;
+                }
+            </script>
+
+            <style type="text/css">
+                p {font-weight: bolder }
+            </style>
+
+        </form>
+    </div>
+</apex:page>

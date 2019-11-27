@@ -1,0 +1,25 @@
+<apex:page controller="OOPController" title="{!oop.currentStep.title}" showHeader="false" sidebar="false" standardStylesheets="false"> 
+
+    <apex:composition template="OOPTemplate">
+        <apex:define name="header">
+            <c:OOPHeader stepFile="{!oop.currentStep.navImage}" /> 
+        </apex:define>
+
+            <apex:define name="body">
+                <apex:form id="oopForm">
+                <br />
+                <div class="textHighlight">Welcome {!oop.opportunity.Account.Name}. Thank you for choosing Pictometry, an EagleView company as your service provider.</div> 
+                <br />
+                Please note: Acceptance of the terms and conditions
+                <apex:outputText value=" and payment are required prior to account activation." rendered="{!oop.opportunity.Account.Is_Pictometry_Commercial__c}" />
+                <apex:outputText value=" is required prior to account activation." rendered="{!!oop.opportunity.Account.Is_Pictometry_Commercial__c}" />
+                
+                <br /><br /><br /><br />
+                <div style="width:98%;horizontal-align:center;text-align: center;">         
+                    <apex:commandButton action="{!oop.Next}" disabled="{!NOT(oop.hasNext)}" value="Start"  />
+                </div>
+                </apex:form>
+            </apex:define> 
+    </apex:composition>
+    
+</apex:page>

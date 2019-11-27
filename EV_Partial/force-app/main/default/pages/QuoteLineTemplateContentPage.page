@@ -1,0 +1,151 @@
+<apex:page showHeader="false" sidebar="false" cache="false" contentType="text/xml" controller="QuoteLineTemplateContentController">
+    <apex:repeat var="group" value="{!quoteLineGroupList}" >
+        <block font-size="9" font-family="Helvetica" margin-bottom="15px" margin-top="10px">
+            <apex:outputText value="{!group.Name}" />
+                <table table-layout="fixed" width="100%" border-top-style="none" border-bottom-style="none" border-left-style="none" border-right-style="none">
+                    <table-body>
+                    <!-- headers -->
+                        <table-row border-top-style="solid" border-bottom-style="solid" border-left-style="solid" border-right-style="solid">
+                            <table-cell display-align="center" padding-left="3" width="55px" border-left-style="solid">
+                                <block text-align="center" font-weight="bold">
+                                    <apex:outputText value="Qty"></apex:outputText>
+                                </block>
+                            </table-cell>
+                            <table-cell display-align="center" padding-left="3" border-left-style="solid">
+                                <block text-align="center" font-weight="bold">
+                                    <apex:outputText value="Product"></apex:outputText>
+                                </block>
+                            </table-cell>
+                            <table-cell display-align="center" padding-left="3" width="85px" border-left-style="solid">
+                                <block text-align="center" font-weight="bold">
+                                    <apex:outputText value="List Price"></apex:outputText>
+                                </block>
+                            </table-cell>
+                            <table-cell display-align="center" width="85px" border-left-style="solid">
+                                <block text-align="center" font-weight="bold">
+                                    <apex:outputText value="Discount (%)"></apex:outputText>
+                                </block>
+                            </table-cell>
+                            <table-cell display-align="center" width="110px" border-left-style="solid">
+                                <block text-align="center" font-weight="bold">
+                                    <apex:outputText value="Subtotal"></apex:outputText>
+                                </block>
+                            </table-cell>
+                        </table-row>
+                        <!-- quote lines -->
+
+                        <apex:repeat value="{!groupIdToQuoteLines[group.Id]}" var="quoteLine">
+                            <table-row>
+                                <table-cell display-align="center" border-top-style="solid" border-bottom-style="solid" border-left-style="solid" border-right-style="solid"  padding-left="3">
+                                    <block text-align="center">
+                                        <apex:outputText value="{0, number,#.##}" >
+                                            <apex:param value="{!quoteLine.SBQQ__Quantity__c}"/>
+                                        </apex:outputText>
+                                    </block>
+                                </table-cell>
+                                <table-cell display-align="center" border-top-style="solid" border-bottom-style="solid" border-left-style="solid" border-right-style="solid"  padding-left="3">
+                                    <block text-align="left">
+                                        <apex:outputText value="{!cleanProductName[quoteLine.SBQQ__Product__c]}" ></apex:outputText>
+                                    </block>
+                                </table-cell>
+                                <table-cell display-align="center" border-top-style="solid" border-bottom-style="solid" border-left-style="solid" border-right-style="solid"  padding-left="3">
+                                    <block text-align="right">
+                                    <apex:outputText value="{0, number, currency}" >
+                                        <apex:param value="{!quoteLine.Regular_Price__c}"/>
+                                    </apex:outputText>
+                                    </block>
+                                </table-cell>
+                                <table-cell display-align="center" border-top-style="solid" border-bottom-style="solid" border-left-style="solid" border-right-style="solid">
+                                    <block text-align="center">
+                                        <apex:outputText value="{!quoteLineToDiscount[quoteLine.Id]}" rendered="{!IF(quoteLineToDiscount[quoteLine.Id] != 0, true, false)}"/>
+                                    </block>
+                                </table-cell>
+                                <table-cell display-align="center" border-top-style="solid" border-bottom-style="solid" border-left-style="solid" border-right-style="solid">
+                                    <block text-align="right">
+                                        <apex:outputText value="{0, number, currency}" >
+                                            <apex:param value="{!quoteLine.SBQQ__NetTotal__c}" />
+                                        </apex:outputText>
+                                    </block>
+                                </table-cell>
+                            </table-row>
+                        </apex:repeat>
+
+                    <!-- footers -->
+                    <table-row border-top-style="none" border-bottom-style="none" border-left-style="none" border-right-style="none">
+                        <table-cell display-align="center">
+                            <block text-align="left">
+                                <apex:outputText value=""></apex:outputText>
+                            </block>
+                        </table-cell>
+                        <table-cell display-align="center">
+                            <block text-align="left">
+                                <apex:outputText value=""></apex:outputText>
+                            </block>
+                        </table-cell>
+                        <table-cell display-align="center">
+                            <block text-align="left">
+                                <apex:outputText value=""></apex:outputText>
+                            </block>
+                        </table-cell>
+                        <table-cell display-align="center">
+                            <block text-align="left">
+                                <apex:outputText value=""></apex:outputText>
+                            </block>
+                        </table-cell>
+                        <table-cell display-align="center">
+                            <block text-align="left">
+                                <apex:outputText value=""></apex:outputText>
+                            </block>
+                        </table-cell>                    
+                    </table-row>
+                    <table-row border-top-style="none" border-bottom-style="none" border-left-style="none" border-right-style="none">
+                        <table-cell display-align="center" border-top-style="none" border-bottom-style="none" border-left-style="none" border-right-style="none">
+                            <block text-align="left">
+                                <apex:outputText value=""></apex:outputText>
+                            </block>
+                        </table-cell>
+                        <table-cell display-align="center" border-top-style="none" border-bottom-style="none" border-left-style="none" border-right-style="none">
+                            <block text-align="left">
+                                <apex:outputText value=""></apex:outputText>
+                            </block>
+                        </table-cell>
+                        <table-cell display-align="center" border-top-style="none" border-bottom-style="none" border-left-style="none" border-right-style="none">
+                            <block text-align="left">
+                                <apex:outputText value=""></apex:outputText>
+                            </block>
+                        </table-cell>
+                        <table-cell display-align="center" border-top-style="none" border-bottom-style="none" border-left-style="none" border-right-style="none">
+                            <block text-align="right" font-weight="bold">
+                                <apex:outputText value="{!group.Name} TOTAL:"></apex:outputText>
+                            </block>
+                        </table-cell>
+                        <table-cell display-align="center" border-bottom-style="solid" border-left-style="solid" border-right-style="solid">
+                            <block text-align="right" font-weight="bold">
+                                <apex:outputText value="{0, number, currency}" >
+                                    <apex:param value="{!group.SBQQ__NetTotal__c}" />
+                                </apex:outputText>
+                            </block>
+                        </table-cell>
+                    </table-row>
+                </table-body>
+            </table>
+        </block>
+    </apex:repeat>
+    <block font-size="9" font-family="Helvetica" margin-bottom="10px" >
+        <table table-layout="fixed" width="100%" border-top-style="none" border-bottom-style="none" border-left-style="none" border-right-style="none">
+            <table-body>
+            <!-- headers -->
+                <table-row border-top-style="none" border-bottom-style="none" border-left-style="none" border-right-style="none">
+                    <table-cell display-align="center" padding-left="3" border-left-style="none">
+                        <block text-align="right" font-weight="bold">
+                            <apex:outputText value="TOTAL: " />
+                            <apex:outputText value="{0, number, currency}" >
+                                <apex:param value="{!netAmount}" />
+                            </apex:outputText>
+                        </block>
+                    </table-cell>
+                </table-row>
+            </table-body>
+        </table>
+    </block>
+</apex:page>

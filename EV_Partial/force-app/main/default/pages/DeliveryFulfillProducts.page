@@ -1,0 +1,47 @@
+<apex:page standardController="Fulfilled_Product__c" recordSetVar="fulFillProd" extensions="DeliveryFulfillProductController">
+    <apex:form > 
+        <apex:pageBlock title="Fulfill Products" mode="edit">
+            <apex:pageMessages />
+            <apex:pageBlockButtons location="top">
+                <apex:commandButton rendered="{!NOT(isError)}" value="Save" action="{!saveFulfilledProducts}"/>
+                <apex:commandButton rendered="{!NOT(isError)}" value="Fulfill All Qtys" action="{!fulfillAllQtys}"/>
+                <apex:commandButton value="Cancel" action="{!cancel}"/>
+            </apex:pageBlockButtons>
+            <br/>
+            <apex:pageBlockSection title="Standard Products" rendered="{!Not(isVendor)}" columns="1">
+				<apex:pageBlockTable title="Standard Products" value="{!stdFulProdList}" var="o" style="width: 100%" >
+					<apex:column value="{!o.ordProd.Name}"/>
+					<apex:column value="{!o.ordProd.Deliverable_Name__c}" headerValue="Deliverable Name"/>
+					<apex:column value="{!o.ordProd.Product_Name__c}" headerValue="Full Product Name"/>
+					<apex:column value="{!o.ordProd.Quantity_Purchased__c}" headerValue="Qty Purchased"/>
+					<apex:column value="{!o.ordProd.Undelivered_Qty__c}"/>
+					<apex:column headerValue="New Qty Delivered">
+						<apex:inputField value="{!o.fulprod.New_Qty_Delivered__c}"/>
+					</apex:column>
+					<apex:column headerValue="Reship Qty Delivered">
+						<apex:inputField value="{!o.fulprod.Reship_Qty_Delivered__c}"/>
+					</apex:column>
+				</apex:pageBlockTable>
+			</apex:pageBlockSection>
+            <br/>
+            <apex:pageBlockSection title="AccuPlus Tile Products" rendered="{!isAccu}" columns="1">
+				<apex:pageBlockTable rendered="{!isAccu}" title="AccuPlus Tile Products" value="{!accuFulProdList}" var="o" style="width: 100%">
+					<apex:column value="{!o.ordProd.Name}"/>
+					<apex:column value="{!o.ordProd.Deliverable_Name__c}" headerValue="Deliverable Name"/>
+					<apex:column value="{!o.ordProd.Product_Name__c}" headerValue="Full Product Name"/>
+					<apex:column value="{!o.ordProd.Quantity_Purchased__c}" headerValue="Qty Purchased"/>
+					<apex:column value="{!o.ordProd.Undelivered_Qty_AP_Tiles__c}"/>
+					<apex:column headerValue="New Qty Delivered (AP Tiles)" rendered="{!Not(isVendor)}">
+						<apex:inputField value="{!o.fulprod.New_Qty_Delivered_AP_Tiles__c}"/>
+					</apex:column>
+					<apex:column headerValue="Reship Qty Delivered (AP Tiles)" rendered="{!Not(isVendor)}">
+						<apex:inputField value="{!o.fulprod.Reship_Qty_Delivered_AP_Tiles__c}"/>
+					</apex:column>
+					<apex:column headerValue="{!$ObjectType.Fulfilled_Product__c.fields.Qty_Delivered_Vendor_AP_Tiles__c.Label}" rendered="{!isVendor}">
+						<apex:inputField value="{!o.fulprod.Qty_Delivered_Vendor_AP_Tiles__c}"/>
+					</apex:column>
+				</apex:pageBlockTable>
+			</apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

@@ -1,0 +1,22 @@
+<apex:page showHeader="false" sidebar="false" cache="false" contentType="text/xml" controller="QuoteLineTemplateContentController" >
+    <block>
+        <apex:outputPanel layout="none" rendered="{!quote.Single_Project_Summary__c != null}">
+            <table width="100%">
+                <table-body border-top-style="solid" border-bottom-style="solid" border-left-style="solid" border-right-style="solid" background-color="rgb(204, 204, 204)">
+                    <table-row text-align="center">
+                        <table-cell>
+                            <block font-size="16" text-decoration="underline" color="#000033" padding-bottom="3">
+                                <apex:outputText value="Single-Project Summary"/>
+                            </block>
+                            <block font-size="12" color="#000033" padding-left="3" padding-bottom="3">
+                                <apex:outputText value="Project Total: {0, number, currency}" >
+                                    <apex:param value="{!quote.Single_Project_Summary__c}"/>
+                                </apex:outputText>
+                            </block>
+                        </table-cell>
+                    </table-row>
+                </table-body>
+            </table>
+        </apex:outputPanel>
+    </block>
+</apex:page>

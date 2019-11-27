@@ -1,0 +1,75 @@
+<apex:page controller="AddGeofenceController">
+
+    
+    <script type="text/javascript">
+        
+        function checkAll(thisVal,thisId) {
+            var inputElement = document.getElementsByTagName("input");
+            for(var i=0; i<inputElement.length; i++) {
+                inputElement[i].checked = thisVal.checked;
+            }
+        }
+        
+        function callSearch(ev)  {
+            if (window.event && window.event.keyCode == 13 || ev.which == 13) {
+                doSearch();
+                return false;
+            } else {
+                return true;
+            }
+        } 
+        
+        document.body.onkeypress = function(e){
+            var keycode;  
+            if (window.event) {  
+                keycode = window.event.keyCode;  
+            } else if (e) {
+                keycode = e.which;
+            }
+            
+            if(keycode == 13) {
+                doSearch(); 
+                return false;
+            }
+            else
+                return true;
+        }
+        
+    </script>
+    
+    <apex:form id="theForm">
+        <apex:pageMessages ></apex:pageMessages>
+        <apex:actionFunction name="doSearch" action="{!searchGeoFence}"/>
+        <apex:pageBlock title="Add Geofences" id="topBlock">
+            <apex:pageBlockButtons id="blockButton">
+                
+                <apex:commandButton value="Save" action="{!dosave}" disabled="{!geoWrapperlist.size==0}"/>
+                <apex:commandButton value="Cancel" action="{!cancel}"/>    
+                
+            </apex:pageBlockButtons>
+            <apex:outputLabel value="Search Geofences"/>&nbsp;
+            <apex:inputText value="{!geofenceSearchStr}" onkeypress="return callSearch(event);"/> 
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <apex:outputLabel value="{!$ObjectType.Geofence__c.fields.Type__c.label}"/>&nbsp;
+            
+            <apex:selectList multiselect="false" size="1" value="{!typeStrSelect}">
+                <apex:selectOptions value="{!typeSelectOptions}"/>
+            </apex:selectList>
+            
+            <apex:commandButton value="Search" action="{!searchGeoFence}" id="buttonId"/>   
+              
+            <apex:pageBlockTable value="{!geoWrapperlist}" var="geo" rendered="{!geoWrapperlist.size!=0}">
+                <apex:column width="20%">
+                    <apex:facet name="header">
+                        <apex:inputCheckbox onclick="checkAll(this)" />
+                    </apex:facet>
+                    <apex:inputCheckbox value="{!geo.isChecked}"/>
+                </apex:column>
+                <apex:column value="{!geo.geoName}" headerValue="Geofence Name" width="40%"/>
+                <apex:column headerValue="Primary Geofence" width="20%">
+                    <apex:inputCheckbox value="{!geo.primaryCheck}"/>
+                </apex:column>
+            </apex:pageBlockTable> 
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

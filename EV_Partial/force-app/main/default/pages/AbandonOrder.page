@@ -1,0 +1,27 @@
+<apex:page standardController="Order__c" action="{!abandonCloneOrder}" extensions="cloneOrderController">
+    <apex:form >
+        <!-- Page Header -->
+        <apex:sectionHeader title="Abandon Order" subtitle="{!ordFull.Name}"/>
+        <div style="margin-bottom: 10px">
+            <a href="/{!ordFull.Id}" >Return to Order</a>
+        </div>
+        <apex:pageMessages escape="false" />
+
+        <apex:pageBlock title="Order Maps" mode="edit" id="page">
+            <!-- Save and Cancel Buttons -->
+            <apex:pageBlockButtons location="both" >
+                <apex:commandButton value="Save" action="{!abandonCloneOrder}" />
+                <apex:commandButton value="Cancel" action="{!cancel}" />
+            </apex:pageBlockButtons>
+
+            <apex:pageBlockTable value="{!OrderMaps}" var="item">
+                <apex:column >
+                    <apex:inputCheckbox value="{!item.selected}" />
+                </apex:column>
+                <apex:column value="{!item.ord.Name}" />
+                <apex:column value="{!item.ord.CPID__c}" />
+                <apex:column value="{!item.ord.Special_Details__c}" />
+            </apex:pageBlockTable>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

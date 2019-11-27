@@ -1,0 +1,27 @@
+<apex:page controller="OOPController" title="{!oop.currentStep.title}" showHeader="false" sidebar="false" standardStylesheets="false"> 
+<apex:variable var="isMini" value="{!oop.Opportunity.Completed_in_Mini_Activation_Site__c}" />
+<apex:variable var="isMiniDeposit" value="{!oop.Opportunity.Completed_In_Mini_Deposit_Site__c}" />
+
+    <apex:composition template="OOPTemplate">
+        <apex:define name="header">
+			<c:OOPHeader stepFile="{!IF(isMini, "", oop.currentStep.navImage)}" />
+        </apex:define> 
+        
+        <apex:define name="body">
+			<apex:form id="oopForm">
+    		<c:OOPOrderDetail OOP="{!oop}" showInst="true" isMiniSite="{!isMini}" isConfPage="true" rendered="{!!isMiniDeposit}" />
+    		
+			<br /><br />
+	        <div style="width:98%;horizontal-align:center;text-align: center;">
+				<div class="highlightText">
+					<apex:outputText value="{!confirmLabel}" escape="false"></apex:outputText>
+				</div>
+				<br />
+				<apex:commandButton rendered="{!!isMini}" value="Export PDF" onclick="window.open('/activate/OOPReviewPDF?id={!oop.encryptedOppID}', '_blank'); return false;" />
+			</div>
+			<br /><br /><br /><br />
+			</apex:form>
+        </apex:define>
+        
+    </apex:composition>
+</apex:page>

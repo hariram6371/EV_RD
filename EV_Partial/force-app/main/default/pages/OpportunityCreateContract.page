@@ -1,0 +1,39 @@
+<apex:page standardController="Opportunity" extensions="OpportunityCreateContractController" tabStyle="Opportunity">
+    <apex:includeScript value="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" />
+    <h1>{!opp.Name}</h1>
+    
+    <apex:outputPanel rendered="{!NOT(errorMessage == null)}">
+        <div style="font-weight: bold; color: red; margin-top: 20px">
+            {!errorMessage}
+        </div>
+    </apex:outputPanel>
+    <apex:outputPanel rendered="{!errorMessage == null}">
+        <script type="text/javascript">
+            var w = window.open('https://www.appextremes.com/apps/Conga/PointMerge.aspx?sessionId={!$Api.Session_ID}&serverUrl={!$Api.Partner_Server_URL_80}&id={!LEFT(opp.Id, 15)}&ReportId=00OG00000042bWH?pv0={!LEFT(opp.Id, 15)}~pv1=Notices+To,00OG00000042bWH?pv0={!LEFT(opp.Id, 15)}~pv1=Bill+To,00OG00000042bWH?pv0={!LEFT(opp.Id, 15)}~pv1=Ship+To,00OG00000042bWH?pv0={!LEFT(opp.Id, 15)}~pv1=Authorized+User,00OG00000042bWH?pv0={!LEFT(opp.Id, 15)}~pv1=Technical+Contact,00OG00000042bWI?pv0={!LEFT(opp.Id, 15)}~pv1=1,00OG00000042bWI?pv0={!LEFT(opp.Id, 15)}~pv1=2,00OG00000042bWI?pv0={!LEFT(opp.Id, 15)}~pv1=3,00OG00000042bWI?pv0={!LEFT(opp.Id, 15)}~pv1=4,00OG00000042bWI?pv0={!LEFT(opp.Id, 15)}~pv1=5,00OG00000042bWI?pv0={!LEFT(opp.Id, 15)}~pv1=6,00OG00000042bW5?pv0={!LEFT(opp.Id, 15)}~pv1=1,00OG00000042bW5?pv0={!LEFT(opp.Id, 15)}~pv1=2,00OG00000042bW5?pv0={!LEFT(opp.Id, 15)}~pv1=3,00OG00000042bW5?pv0={!LEFT(opp.Id, 15)}~pv1=4,00OG00000042bW5?pv0={!LEFT(opp.Id, 15)}~pv1=5,00OG00000042bW5?pv0={!LEFT(opp.Id, 15)}~pv1=6,00OG0000004dPLW?pv0={!LEFT(opp.Id, 15)}~pv1=Oblique+Imagery,00OG0000004dPLW?pv0={!LEFT(opp.Id, 15)}~pv1=AccuPlus,00OG0000004dPLW?pv0={!LEFT(opp.Id, 15)}~pv1=LiDAR,00OG0000004dPLW?pv0={!LEFT(opp.Id, 15)}~pv1=ChangeFindr,00OG0000004dPLW?pv0={!LEFT(opp.Id, 15)}~pv1=3D,00OG0000004dPLW?pv0={!LEFT(opp.Id, 15)}~pv1=Server+Edition,00OG0000004dPLW?pv0={!LEFT(opp.Id, 15)}~pv1=POL,00OG0000004dPLW?pv0={!LEFT(opp.Id, 15)}~pv1=Sketch+Check,00OG0000004dPLW?pv0={!LEFT(opp.Id, 15)}~pv1=Mosaic+Tiles,00OG0000004dPLW?pv0={!LEFT(opp.Id, 15)}~pv1=Connect,00OG0000004dPLW?pv0={!LEFT(opp.Id, 15)}~pv1=Connect-Desktop,00OG0000004dPLW?pv0={!LEFT(opp.Id, 15)}~pv1=Connect-Desktop+Application,00OG0000004dPLW?pv0={!LEFT(opp.Id, 15)}~pv1=Connect-Server+Integration,00OG0000004dPLW?pv0={!LEFT(opp.Id, 15)}~pv1=Connect-Third-Party+Integration,00OG0000004dPLV?pv0={!LEFT(opp.Id, 15)}~pv1=EAP,00OG0000004dPLV?pv0={!LEFT(opp.Id, 15)}~pv1=Content,00OG0000004dPLV?pv0={!LEFT(opp.Id, 15)}~pv1=Online+Svcs,00OG0000004dPLV?pv0={!LEFT(opp.Id, 15)}~pv1=Software,00OG0000004dPLV?pv0={!LEFT(opp.Id, 15)}~pv1=SE-EULA,00OG0000004dPLV?pv0={!LEFT(opp.Id, 15)}~pv1=AccuPlus,00OG0000004dPLV?pv0={!LEFT(opp.Id, 15)}~pv1=LiDAR-1,00OG0000004dPLV?pv0={!LEFT(opp.Id, 15)}~pv1=LiDAR-7,00OG0000004dPLV?pv0={!LEFT(opp.Id, 15)}~pv1=LiDAR-5,00OG0000004dPLV?pv0={!LEFT(opp.Id, 15)}~pv1=DEM,00OG0000004dPLV?pv0={!LEFT(opp.Id, 15)}~pv1=Contours,00OG0000004dPLV?pv0={!LEFT(opp.Id, 15)}~pv1=Slope,00OG0000004dPLV?pv0={!LEFT(opp.Id, 15)}~pv1=Void,00OG0000004dPLV?pv0={!LEFT(opp.Id, 15)}~pv1=DSM,00OG0000004dPLV?pv0={!LEFT(opp.Id, 15)}~pv1=FEMA,00OG0000004dPLX,00OG0000004dPLV?pv0={!LEFT(opp.Id, 15)}~pv1=Visual,00OG0000004dngQ,00OG0000004dPLW?pv0={!LEFT(opp.Id, 15)}~pv1=SE-Key,00OG0000004dPLW?pv0={!LEFT(opp.Id, 15)}~pv1=Corridor&TemplateGroup={!IF(OR(opp.RecordTypeId="012G0000000mqZLIAY",opp.RecordTypeId="012G0000000mqZMIAY"),"Contracts-USGovt-Multi",IF(opp.RecordTypeId="012G0000000mraTIAQ","Contracts-CanadaGovt-Multi",IF(OR(opp.RecordTypeId="012G0000000nAwzIAE",opp.RecordTypeId="012G0000000ms8KIAQ"),"Contracts-Commercial-Multi","Contracts-All-Multi")))}&MFTS0=Contract_Created__c&MFTSValue0=FALSE&FP0=1&LG4=1&LG3=2&DS2=1&PS0=1&PS1=1&PS2=0&OFN=Pictometry+Contract+for+{!JSENCODE(opp.Name)}', 'Create_Contract', 'width=700,height=500');  
+            
+            if(!w)
+            {
+                alert('Please disable pop-up blocker then reload this page.');
+            }
+            else
+            {
+                if( isLightningExperienceOrSalesforce1() ) 
+                {
+                    sforce.one.navigateToSObject('{!opp.Id}');
+                }
+                else
+                {
+                    location.replace('/' + '{!opp.Id}');
+                }
+            }
+            
+            function isLightningExperienceOrSalesforce1() 
+            {
+                return typeof sforce != 'undefined' && sforce && (!!sforce.one);
+            }
+        </script>
+    </apex:outputPanel>
+    <div style="margin-top: 20px">
+        <a href="/{!opp.Id}" >Return to opportunity</a>
+    </div>
+</apex:page>

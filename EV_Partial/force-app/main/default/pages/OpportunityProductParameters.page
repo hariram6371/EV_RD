@@ -1,0 +1,268 @@
+<!--
+ - Created by SentientGrey on 11/1/16.
+ -->
+
+<apex:page id="OpportunityProductParameters" standardController="Opportunity" extensions="OpportunityProductParametersController">
+    <apex:includeScript value="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" />
+    <style>
+        .container-fields {background-color: white;}
+        .container-field {min-width: 200px; float: left; margin: 10px 25px 10px 0px;}
+        .table {width: 100%;}
+        .table tr th {padding: 4px !important; border: #ccc solid 1px !important; background-color: #eee}
+        .table tr td {padding: 4px !important; border: #ccc solid 1px !important;}
+        .help-container {font-weight: bold; color: #f88962;}
+
+        .error-message {margin: 5px; padding: 5px; color: #c23934;}
+        .error-hide {display: none;}
+        .error-color{color: #c23934;}
+        .slds-has-error input.slds-input, .slds-has-error select.slds-input, .slds-has-error select.slds-select,
+        .slds-has-error textarea.slds-textarea {
+            border-color: #c23934;
+        }
+
+        .div-output{margin: 10px !important; font-style: italic !important;}
+
+        .overlay {position: fixed; top: 0; left: 0; height: 100%; width: 100%; z-index: 2000; background-color: rgba(0,0,0,0.5);}
+        .white-box{width: 300px; height: 110px; position: fixed; top: 50%; left: 50%; margin-top: -100px; margin-left: -150px; background-color: #FFFFFF; border-radius: 5px; text-align: center; z-index: 2001;}
+        .white-box div{padding: 42px 10px; text-align: center;}
+        #loadingLabel{font-weight: bold; font-size: 26px;}
+    </style>
+    <div id="overlay" style="display: none;">
+        <div class="overlay">
+        </div>
+        <div class="white-box">
+            <div>
+                <span id="loadingLabel">Processing...</span>
+            </div>
+        </div>
+    </div>
+    <apex:form >
+        <!-- Page Header -->
+        <apex:sectionHeader title="Edit Product Parameters" subtitle="{!Opportunity.Name}"/>
+
+        <apex:pageMessage severity="warning" strength="3" summary="{!warning}" rendered="{!NOT(showSave)}" />
+        <apex:pageMessages />
+        <apex:actionFunction name="redirect" action="{!redirect}" reRender="pnlRedirect"/>
+
+        <apex:pageBlock title="Opportunity Products" mode="edit" id="page">
+            <!-- Save and Cancel Buttons -->
+            <apex:pageBlockButtons location="both" >
+                <apex:outputPanel rendered="{!showSave}" layout="inline">
+                    <input type="button" onclick="return validateAndSave();" value="Save" class="btn" />
+                </apex:outputPanel>
+                <apex:commandButton value="Cancel" action="{!cancel}" />
+                <div class="error-message error-hide" >You must fill all required fields.</div>
+            </apex:pageBlockButtons>
+            <apex:actionFunction name="saveData" action="{!saveParameters}" />
+
+            <apex:repeat value="{!SectionsWithItems}" var="s">
+                <apex:pageBlockSection title="{!s.section.Title__c}" collapsible="false" columns="1" rendered="{!s.hasLineItems}">
+                    <apex:outputPanel layout="block" styleClass="container-fields">
+                        <table class="table" cellspacing="0" >
+                            <apex:repeat value="{!s.lineItems}" var="l">
+                                <tr>
+                                    <th style="width: 40%;">
+                                        <apex:outputText value="{!l.item.Product_Name__c}" />
+                                    </th>
+                                    <th style="width: 30%;">
+                                        <apex:outputText value="{!l.item.ProductCode}" />
+                                    </th>
+                                    <th style="width: 20%;">
+                                        <apex:outputText value="{!l.item.Opportunity.Name}" rendered="{!l.item.Opportunity.Parent_Opportunity__c != null}"  />
+                                    </th>
+                                    <th style="width: 10%; text-align: left;">
+                                        <apex:outputText value="{!l.item.Quantity}" />
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <td colspan="4">
+                                        <apex:outputPanel layout="block" rendered="{!OR(l.showAlways, NOT(l.sameAsPrevious))}" style="overflow: auto;">
+                                            <apex:repeat value="{!s.fields}" var="f">
+                                                <div id="{!f.fsm}" class="container-field {!IF(f.required, 'slds-is-required', '')}">
+                                                    <div class="container-field-label">
+                                                        <span class="error-color" style="display: {!IF(f.required, 'inline', 'none')}">*</span>{!f.fsm.label}
+                                                        <span class="help-container" style="cursor: pointer; display: {!IF(f.helpText == null || f.helpText == '', 'none', 'inline-block')};" title="{!f.helpText}">
+                                                            ?
+                                                        </span>
+                                                    </div>
+                                                    <!--<apex:inputField value="{!l.item[f.fsm.fieldPath]}" required="{!f.required}" />-->
+                                                    <apex:inputField rendered="{!NOT(l.readOnly)}" styleClass="{!IF(f.dataType == 'PICKLIST', 'slds-select', IF(f.dataType == 'TEXTAREA', 'slds-textarea', IF(f.dataType == 'MULTIPICKLIST', '', 'slds-input')))}" value="{!l.item[f.fsm.fieldPath]}" />
+                                                    <apex:outputPanel styleClass="div-output" layout="block" rendered="{!l.readOnly}">
+                                                        <apex:outputField value="{!l.item[f.fsm.fieldPath]}" />
+                                                    </apex:outputPanel>
+                                                </div>
+                                            </apex:repeat>
+                                        </apex:outputPanel>
+                                        <apex:outputPanel layout="block"  rendered="{!NOT(l.showAlways)}">
+
+                                                <apex:inputCheckbox value="{!l.sameAsPrevious}" >
+                                                    <apex:actionSupport event="onchange" reRender="page">
+                                                    </apex:actionSupport>
+                                                </apex:inputCheckbox> <strong>Same as Previous</strong>
+
+                                        </apex:outputPanel>
+                                    </td>
+                                </tr>
+                            </apex:repeat>
+                        </table>
+                    </apex:outputPanel>
+                </apex:pageBlockSection>
+            </apex:repeat>
+        </apex:pageBlock>
+
+        <apex:outputPanel id="pnlRedirect" >
+            <script type="text/javascript">
+
+                function redirectTimeout()
+                {
+                    setTimeout(redirect, 5000);
+                }
+
+                function displayOverlay()
+                {
+                    $("#overlay").attr('style','display: block;');
+                }
+
+                function hideOverlay()
+                {
+                    $("#overlay").attr('style','display: none;');
+                }
+
+                if({!updated})
+                {
+                    displayOverlay();
+                    redirectTimeout();
+                }
+                else
+                {
+                    hideOverlay();
+                }
+            </script>
+        </apex:outputPanel>
+
+    </apex:form>
+    <script type="text/javascript">
+
+        $(function()
+        {
+           /* $.each($('.multiSelectPicklistRow img'), function()
+            {
+                //alert($(this));
+                $(this).css("height", "20px");
+            });*/
+
+            $.each($('a.slds-input'), function()
+            {
+                $(this).removeAttr('class');
+            });
+
+            setTimeout(timeoutFunc, 1500);
+        });
+
+        function  timeoutFunc()
+        {
+            /*$.each($('.multiSelectPicklistRow td'), function(index)
+            {
+                if((index % 3) == 1)
+                {
+                    $(this).attr("style","width: 10%; text-align: center;");
+                }
+                else
+                {
+                    $(this).attr("style","width: 45%;");
+                }
+            });*/
+
+            $.each($('.multiSelectPicklistRow select'), function()
+            {
+               // $(this).attr("style","width: 100%;");
+                $(this).attr("class","slds-input");
+            });
+
+            $.each($('select[disabled]'), function()
+            {
+                //alert($(this));
+                $(this).attr('class', 'slds-select');
+            });
+        }
+
+        function validateAndSave()
+        {
+            var valid = true;
+
+            displayOverlay();
+
+            clearValidation();
+
+            //require text fields
+            $.each($('.slds-is-required input'), function()
+            {
+                if($(this).val() == '')
+                {
+                    $(this).parents('.slds-is-required').addClass('slds-has-error');
+                    valid = false;
+                }
+            });
+
+            //require textarea fields
+            $.each($('.slds-is-required textarea'), function()
+            {
+                if($(this).val() == '')
+                {
+                    $(this).parents('.slds-is-required').addClass('slds-has-error');
+                    valid = false;
+                }
+            });
+
+            //require multi-select
+            $.each($('.slds-is-required table select[multiple="multiple"]'), function()
+            {
+                if(($(this).val() == null || $(this).val() == '' || $(this).val() == '--None--') &&
+                    $(this).attr('ondblclick') != undefined && $(this).attr('ondblclick').indexOf('.handleMSPUnSelect') > 0
+                    && $(this).children('option').length == 0)
+                {
+                    var selector = '#' + $(this).attr('id').replace('_selected','').replace(/:/g, '\\:') + ' :selected';
+                    alert(selector);
+                    if($(selector).length == 0)
+                    {
+                        $(this).parents('.slds-is-required').addClass('slds-has-error');
+                        valid = false;
+                    }
+                }
+            });
+
+            //require single-select
+            $.each($('.slds-is-required select'), function()
+            {
+                if(($(this).val() == null || $(this).val() == '' || $(this).val() == '--None--') &&
+                    $(this).attr('ondblclick') == undefined && $(this).attr('multiple') == undefined)
+                {
+                    $(this).parents('.slds-is-required').addClass('slds-has-error');
+                    valid = false;
+                }
+            });
+
+            if(valid)
+            {
+                saveData();
+            }
+            else
+            {
+                hideOverlay();
+                $('.error-message').removeClass('error-hide');
+            }
+
+            return valid;
+        }
+
+        function clearValidation()
+        {
+            $('.slds-is-required').removeClass('slds-has-error');
+
+            if(!$('.error-message').hasClass('error-hide'))
+            {
+                $('.error-message').addClass('error-hide');
+            }
+        }
+    </script>
+</apex:page>

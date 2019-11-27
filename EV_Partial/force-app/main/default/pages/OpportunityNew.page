@@ -1,0 +1,24 @@
+<apex:page standardController="Opportunity" recordSetVar="opportunities" tabStyle="Opportunity" extensions="OpportunityNewController">
+<apex:includeScript value="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" />
+	<h1>New Opportunity</h1>
+	<apex:outputPanel rendered="{!url != null}">
+		<script type="text/javascript">
+			if(isLightningExperienceOrSalesforce1()) 
+ 			{
+ 				sforce.one.navigateToURL('{!url}');
+ 			}
+ 			else
+ 			{
+ 					window.location = '{!url}';
+ 			}
+			
+			function isLightningExperienceOrSalesforce1() 
+			{
+    			return typeof sforce != 'undefined' && sforce && (!!sforce.one);
+			}
+		</script>
+	</apex:outputPanel>
+	<div style="margin-top: 20px">
+		<a href="/{!accountId}" >Return to account</a>
+	</div>
+</apex:page>

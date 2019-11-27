@@ -1,0 +1,17 @@
+<apex:page cache="false">
+	<apex:stylesheet value="{!$Resource.OOPStyles}"/>
+
+	    <br />
+		<div style="margin:0 auto;width:1000px;">
+		    <apex:outputText value="Data not found" rendered="{!$CurrentPage.parameters.id = null}" />
+		    
+		    <apex:outputPanel rendered="{!$CurrentPage.parameters.id != null}">
+    		    <apex:insert name="header" />
+    		    <br /><br />
+    		    
+    		    <apex:pageMessages />
+
+   		    	<apex:insert name="body" />
+		    </apex:outputPanel>
+		</div>
+</apex:page>

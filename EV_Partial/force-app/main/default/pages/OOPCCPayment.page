@@ -1,0 +1,37 @@
+<apex:page controller="OOPController" showHeader="false" sidebar="false" standardStylesheets="false" action="{!savePaymentToken}"> 
+    <apex:stylesheet value="{!$Resource.OOPStyles}"/>
+
+      <apex:outputPanel rendered="{!!calloutResponse.hasErrror}">
+          <br />
+          <div class="textHighlight" style="width:98%;horizontal-align:center;text-align: center;">Processing.... <apex:image url="{!$Resource.LoadingGif}" /></div>
+          
+          
+          <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
+          <script type="text/javascript">
+            $(document).ready(function() {
+              window.document.forms[0].submit();
+            });
+          </script>
+          
+          <form id="authForm" name="authForm" action="{!cybersourceAuthURL}" method="post">   
+                  <apex:outputText value="{!formCCData2}" escape="false" />
+          </form> 
+      </apex:outputPanel>
+      
+      
+      <apex:outputPanel rendered="{!calloutResponse.hasErrror}">
+          <div style="width:98%;horizontal-align:center;text-align:center;margin:0 auto;">
+            
+            <c:OOPHeader stepFile="step3.png" />
+              <br /><br />
+            
+            <div class="textHighlightWarning">{!calloutResponse.errorMessage}</div>
+            <br /><br />
+            <div class="textHighlightWarning">
+                <apex:outputLink value="/activate/ooppayment?id={!calloutResponse.oppId}" rendered="{!!isInMiniPayPage}">Retry Payment</apex:outputLink>
+                <apex:outputLink value="/activate/ooppaymentmini?id={!calloutResponse.oppId}" rendered="{!isInMiniPayPage && isMiniPayDeposit = false}">Retry Payment</apex:outputLink>
+                <apex:outputLink value="/activate/ooppaymentminideposit?id={!calloutResponse.oppId}" rendered="{!isMiniPayDeposit}">Retry Payment</apex:outputLink>
+            </div>          
+          </div>
+      </apex:outputPanel>
+</apex:page>

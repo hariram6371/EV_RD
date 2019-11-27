@@ -1,0 +1,16 @@
+<apex:component >
+    <apex:attribute name="stepFile" description="Name of the navigation image file." type="String" required="true"/>
+    <apex:attribute name="showLabel" description="Text for top right of header" type="String" required="false"/>
+    
+    <table style="width:1000">
+        <tr>
+            <td style="width:550px;">
+                <apex:image url="{!$Resource.EagleViewLogo}" width="350" />
+            </td>
+            <td>
+                <apex:image url="{!URLFOR($Resource.OOPNavSteps,"/" + stepFile)}" width="450" rendered="{!stepFile != ''}" />
+                <apex:outputText value="{!showLabel}" rendered="{!stepFile = ''}" style="vertical-align:right;align:right;font-weight:bold;font-size:18px;margin-left:500px;" />
+            </td>
+        </tr>
+    </table> 
+</apex:component>

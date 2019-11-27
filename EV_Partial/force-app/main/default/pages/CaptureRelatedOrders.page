@@ -1,0 +1,28 @@
+<!--
+ - Created by SentientGrey on 1/9/18.
+ -->
+
+<apex:page id="CaptureRelatedOrders" standardController="Capture2__c" extensions="CaptureRelatedOrdersController">
+    <apex:pageBlock title="" >
+        <apex:pageBlockTable value="{!relatedOrders}" var="o">
+            <apex:column headerValue="Related Captures">
+                <apex:outputPanel rendered="{!o.Capture__c != Capture2__c.Id}" layout="inline">
+                    <a href="/{!o.Capture__c}" target="_parent">{!o.Capture__r.Name}</a>
+                </apex:outputPanel>
+                <apex:outputPanel rendered="{!o.Capture__c == Capture2__c.Id}" layout="inline">
+                    {!o.Capture__r.Name}
+                </apex:outputPanel>
+            </apex:column>
+            <apex:column headerValue="Related Orders">
+                <a href="/{!o.Order__c}" target="_parent">{!o.Order__r.Name}</a>
+            </apex:column>
+            <apex:column value="{!o.Capture__r.Geomatics_Team__c}" headerValue="Geomatics Team" />
+            <apex:column headerValue="Geomatics Team Manager">
+                <a href="/{!o.Capture__r.Geomatics_Team_Manager__c}" target="_parent">{!o.Capture__r.Geomatics_Team_Manager__r.Name}</a>
+            </apex:column>
+            <apex:column headerValue="Geomatics Builder" >
+                <a href="/{!o.Capture__r.Geomatics_Builder__c}" target="_parent">{!o.Capture__r.Geomatics_Builder__r.Name}</a>
+            </apex:column>
+        </apex:pageBlockTable>
+    </apex:pageBlock>
+</apex:page>

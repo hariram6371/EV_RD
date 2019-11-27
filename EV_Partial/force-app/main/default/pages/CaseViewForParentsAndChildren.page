@@ -1,0 +1,44 @@
+<apex:page showHeader="false" sidebar="false" standardController="Case" extensions="CaseViewForParentsAndChildrenController">
+    <apex:includeScript value="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js" />
+
+    <script>
+    // Set all links to open in new window
+    window.onload=function()       
+    {
+       $("a").attr("target", "_new");
+    }
+    </script>
+    <div id="relatedItems">
+        <apex:repeat value="{!casesToDisplay}" var="c">
+            <apex:pageBlock title="Case {!c.CaseNumber} - {!c.Subject}">
+                <apex:pageBlock title="Case Comments">
+                    <apex:pageBlockTable value="{!c.casecomments}" var="cc">
+                        <apex:column value="{!cc.CreatedById}"/>
+                        <apex:column value="{!cc.CreatedDate}"/>
+                        <apex:column value="{!cc.CommentBody}"/>
+                    </apex:pageBlockTable>
+                </apex:pageBlock>
+                <br/>
+                <apex:relatedList subject="{!c}" list="CombinedAttachments" pageSize="5" >
+                    <apex:facet name="header">
+                        <table border="0" cellpadding="0" cellspacing="0">
+                            <tbody>
+                                <tr>
+                                    <td class="pbTitle" style="padding: 5px 12px;">
+                                        <h2 class="mainTitle">Attachments</h2>
+                                    </td>
+                                    <td>&nbsp;</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </apex:facet>
+                </apex:relatedList>
+                <br/>
+                <!-- </apex:pageBlockSection> -->
+            </apex:pageBlock>
+            
+        </apex:repeat>
+    </div>
+    
+    
+</apex:page>

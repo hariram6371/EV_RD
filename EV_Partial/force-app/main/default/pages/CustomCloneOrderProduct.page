@@ -1,0 +1,5 @@
+<apex:page cache="false" expires="0" sidebar="false" showHeader="false" standardController="Order_Product__c" 
+    extensions="OrderProductCloneController" 
+    action="{!customCloneOrderProduct}">
+    <apex:pageMessages />
+</apex:page>

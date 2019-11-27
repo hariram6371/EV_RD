@@ -1,0 +1,25 @@
+<apex:page standardController="Delivery__c" recordSetVar="oppProd" action="{!autoCreate}" extensions="miscDeliveryController">
+	<apex:form >
+		<!-- Page Header -->
+		<apex:sectionHeader title="New Delivery" subtitle="{!myOrder.Name}"/>
+		<p>
+			<a href="/{!myOrder.Id}">Return to Order</a>
+		</p>
+
+		<apex:pageMessages />
+		<apex:pageBlock title="Details" mode="edit" id="page" rendered="{!createDelivery}">
+			<!-- Save and Cancel Buttons -->
+			<apex:pageBlockButtons location="bottom" >
+				<apex:commandButton value="OK" action="{!createNew}" />
+				<apex:commandButton value="Cancel" action="{!cancel}" />
+			</apex:pageBlockButtons>
+
+			<apex:pageBlockSection collapsible="false" columns="1" >
+				<apex:selectRadio required="true" label="Please select a delivery type" value="{!selectedOption}" layout="pageDirection">
+					<apex:selectOptions value="{!options}" />
+				</apex:selectRadio>
+
+			</apex:pageBlockSection>
+		</apex:pageBlock>
+	</apex:form>
+</apex:page>

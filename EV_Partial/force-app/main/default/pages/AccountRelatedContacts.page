@@ -1,0 +1,47 @@
+<!--
+ - Created by SentientGrey on 2/6/18.
+ -->
+
+<apex:page id="AccountRelatedContacts" standardController="Account" showHeader="{!showAll}" sideBar="{!showAll}" extensions="AccountRelatedContactsController">
+
+    <apex:form >
+        <apex:sectionHeader title="Related Contacts" subtitle="{!Account.Name}" rendered="{!showAll}" />
+        <apex:outputPanel rendered="{!showAll}" style="margin-bottom: 10px;" layout="block">
+            <a href="/{!Account.Id}">Back to Account</a>
+        </apex:outputPanel>
+        <apex:pageBlock title="Related Contacts">
+            <apex:pageBlockButtons location="top">
+                <apex:outputPanel layout="inline" rendered="{!NOT(showAll)}">
+                    <apex:commandButton action="{!doNothing}" value="New Contact" onClick="parent.location='/setup/ui/recordtypeselect.jsp?ent=Contact&retURL=/{!Account.Id}&save_new_url=/003/e?retURL=/{!Account.Id}&accid={!Account.Id}';" />
+                    <apex:commandButton action="{!doNothing}" value="Merge Contacts" onClick="parent.location='{!URLFOR($Action.Contact.Merge,Account.Id,[retURL=Account.Id])}';" />
+                    <apex:commandButton action="{!doNothing}" value="Add Relationship" onClick="parent.location='/07k/e?retURL=%2F{!Account.Id}&accid={!Account.Id}';" />
+                </apex:outputPanel>
+            </apex:pageBlockButtons>
+            <apex:pageBlockTable value="{!relatedContacts}" var="c">
+                <apex:column headerValue="Action" width="150px">
+                    <a href="javascript:void(0);" onclick="parent.location='/{!c.ContactId}/e?retURL={!Account.Id}';">Edit</a>&nbsp;|&nbsp;
+                    <a href="javascript:void(0);" onclick="parent.location='/{!c.Id}?retURL={!Account.Id}';">View Rel</a>&nbsp;|&nbsp;
+                    <apex:outputPanel layout="inline" rendered="{!c.IsDirect}">
+                        <a href="javascript:void(0);" onclick="parent.location='{!URLFOR($Action.Contact.Delete,c.ContactId,[retURL=Account.Id])}';">Delete</a>
+                    </apex:outputPanel>
+                    <apex:outputPanel layout="inline" rendered="{!NOT(c.IsDirect)}">
+                        <a href="javascript:void(0);" onclick="parent.location='{!URLFOR($Action.Contact.Delete,c.Id,[retURL=Account.Id])}';">Remove</a>
+                    </apex:outputPanel>
+                </apex:column>
+                <apex:column value="{!c.ContactId}" headerValue="Contact Name" />
+                <apex:column value="{!c.Contact.AccountId}" headerValue="Account Name" />
+                <apex:column value="{!c.Contact.Title}" />
+                <apex:column value="{!c.Contact.Department_picklist__c}" />
+                <apex:column value="{!c.Contact.Email}" />
+                <apex:column value="{!c.Contact.Phone}" />
+                <apex:column value="{!c.Contact.MobilePhone}" />
+                <apex:column value="{!c.Roles}" />
+                <apex:column value="{!c.IsDirect}" />
+                <apex:column value="{!c.IsActive}" />
+            </apex:pageBlockTable>
+            <apex:outputPanel layout="block" rendered="{!NOT(showAll)}" style="margin-top: 10px;">
+                <a href="javascript:void(0);" onclick="parent.location='/apex/AccountRelatedContacts?id={!Account.Id}&viewAll=yes';">View all</a>
+            </apex:outputPanel>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

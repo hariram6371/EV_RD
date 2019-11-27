@@ -1,0 +1,31 @@
+<apex:page id="QuoteImageTemplateContent" showHeader="false" sidebar="false" cache="false" contentType="text/xml" controller="QuoteImageTemplateContentController" >
+    <block>
+
+        <apex:repeat value="{!images}" var="i">
+            <apex:outputPanel layout="none" rendered="{!i.count == 1}">
+                <block text-align="center">
+                    <external-graphic content-width="250" src="{!i.image1}" content-type="image/jpeg"/>
+                </block>
+            </apex:outputPanel>
+            <apex:outputPanel layout="none" rendered="{!i.count == 2}">
+                <table width="100%">
+                    <table-body>
+                        <table-row text-align="center">
+                            <table-cell>
+                                <block>
+                                    <external-graphic src="{!i.image1}" content-width="250" content-type="image/jpeg"/>
+                                </block>
+                            </table-cell>
+                            <table-cell>
+                                <block>
+                                    <external-graphic src="{!i.image2}" content-width="250" content-type="image/jpeg"/>
+                                </block>
+                            </table-cell>
+                        </table-row>
+                    </table-body>
+                </table>
+            </apex:outputPanel>
+        </apex:repeat>
+
+    </block>
+</apex:page>

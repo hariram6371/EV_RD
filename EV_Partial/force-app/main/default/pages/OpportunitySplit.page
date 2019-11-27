@@ -1,0 +1,24 @@
+<!--
+ - Created by SentientGrey on 2/4/17.
+ -->
+
+<apex:page id="OpportunitySplit" standardController="Opportunity" extensions="OpportunitySplitController">
+
+    <apex:form >
+        <!-- Page Header -->
+        <apex:sectionHeader title="Split Opportunity" subtitle="{!Opportunity.Name}"/>
+
+        <apex:pageBlock title="" mode="edit" id="page">
+            <!-- OK and Cancel Buttons -->
+            <apex:pageBlockButtons location="bottom" >
+                <apex:commandButton value="OK" action="{!splitOpportunity}" rendered="{!NOT(hasError)}" />
+                <apex:commandButton value="Cancel" action="{!cancel}" />
+            </apex:pageBlockButtons>
+
+            <apex:pageMessages />
+            <apex:pageMessage severity="warning" strength="3" summary="{!errorMessage}" rendered="{!hasError}" />
+            <apex:pageMessage severity="confirm" strength="3" summary="Are you sure you would like to split this opportunity into a parent with child opportunities?" rendered="{!NOT(hasError)}" />
+
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

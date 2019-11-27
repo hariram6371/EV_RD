@@ -1,0 +1,252 @@
+<apex:component controller="OpportunityProductEditController" allowDml="true" >
+	<style>
+		 .container-select select {
+		 	background-color: white;
+		    color: #16325c;
+		    border: 1px solid #d8dde6;
+		    border-radius: 4px;
+		    width: 100%;
+		    -webkit-transition: border 0.1s linear, background-color 0.1s linear;
+		    transition: border 0.1s linear, background-color 0.1s linear;
+		    height: 34px;
+		    text-transform: none;  
+		}
+		.error-color{color: #c23934;}
+		.datePicker{z-index: 9003;}
+		.editForm .slds-form-element {border-bottom: 1px solid rgb(216, 221, 230); padding: 5px 0px; min-height: 68px;}
+		.multiSelectPicklistRow select.slds-input {width: 100% !important;}
+		.slds-has-error input.slds-input, .slds-has-error select.slds-input, .slds-has-error select.slds-select,
+		.slds-has-error textarea.slds-textarea {
+			border-color: #c23934;
+			-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
+			box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
+		}
+	</style>
+	<apex:outputPanel id="editForm" styleClass="editForm">
+		<apex:outputPanel rendered="{!success==true}">
+			<script type="text/javascript">
+				if(typeof sforce != 'undefined' && sforce && (!!sforce.one)) 
+   				{
+   					if({!redirectToOpp})
+   					{
+   						sforce.one.navigateToSObject('{!lineItem.OpportunityId}');
+   					}
+   					else
+   					{
+   						sforce.one.navigateToSObject('{!lineItem.Id}');
+   					}
+   				}
+   				else
+   				{
+   					if({!redirectToOpp})
+   					{
+   						location.replace('/' + '{!lineItem.OpportunityId}');
+   					}
+   					else
+   					{
+   						location.replace('/' + '{!lineItem.Id}');
+   					}
+   				}
+			</script>
+		</apex:outputPanel>
+		
+		<apex:outputPanel rendered="{!message != null}">
+			<div class="slds-notify slds-notify--alert slds-theme--error" role="alert">
+			<span class="slds-assistive-text">Info</span>
+		  	<h2>
+		  		{!message}
+		 	</h2>
+		</div>
+		</apex:outputPanel>
+		
+		<!-- SECTIONS -->   
+	    <apex:repeat value="{!EditSections}" var="s">
+		      <div class="section-container">
+		          <div class="slds-grid">
+		            <div class="slds-col--padded slds-size--1-of-1 slds-text-heading--small"><strong>{!s.name}</strong></div>
+		          </div>
+		          <div class="slds-grid ">
+		            <div class="slds-col--padded slds-size--1-of-2">
+		                  <apex:repeat value="{!s.left}" var="f">  
+		                      <div class="slds-grid">
+		                          <div class="slds-col--padded slds-size--1-of-1">
+		                              <div id="{!f.fsm}" class="slds-form-element {!IF(AND(f.required, NOT(f.readOnly)), 'slds-is-required', '')}">
+		                                  <label class="slds-form-element__label"><span class="error-color" style="display: {!IF(AND(f.required, NOT(f.readOnly)), 'inline', 'none')}">*</span>{!SUBSTITUTE(f.fsm.Label, 'ID', '')}
+		                                  	<div class="help-container" style="display: {!IF(f.helpText == null || f.helpText == '', 'none', 'inline-block')};" >
+					                    		<img src="{!URLFOR($Resource.LightningDesignSystem092, 'assets/icons/action/question_post_action_60.png')}" alt="" title="{!f.helpText}"/>
+					                    	</div>
+		                                  </label>
+		                                  <div class="slds-form-element__control input-field {!IF(f.dataType == 'PICKLIST','container-select','')}">
+		                                  	<apex:outputPanel rendered="{!f.readOnly && f.dataType == 'REFERENCE'}" layout="none">
+		                                      	<apex:inputField value="{!lineItem[IF(f.fsm == 'Product2Id', 'PricebookEntry.Product2Id', IF(f.fsm == 'ProductCode' , 'PricebookEntry.Product2.ProductCode', f.fsm))]}" />
+		                                   	  </apex:outputPanel>
+		                                   	  <apex:outputPanel rendered="{!f.readOnly && f.dataType != 'REFERENCE'}" layout="none">
+		                                      	<apex:outputField value="{!lineItem[IF(f.fsm == 'Product2Id', 'PricebookEntry.Product2Id', IF(f.fsm == 'ProductCode' , 'PricebookEntry.Product2.ProductCode', f.fsm))]}" />
+		                                   	  </apex:outputPanel>
+		                                  	 <apex:outputPanel rendered="{!NOT(f.readOnly)}" layout="none">
+		                                      	<apex:inputField styleClass="{!IF(f.dataType == 'PICKLIST', 'slds-select', IF(f.dataType == 'TEXTAREA', 'slds-textarea', IF(f.dataType == 'MULTIPICKLIST', '', 'slds-input')))}" value="{!lineItem[IF(f.fsm == 'Product2Id', 'PricebookEntry.Product2Id', IF(f.fsm == 'ProductCode' , 'PricebookEntry.Product2.ProductCode', f.fsm))]}" />
+		                                   	  </apex:outputPanel>
+		                                  </div>
+		                              </div>  
+		                          </div>
+		                      </div>
+		                  </apex:repeat>
+		            </div>
+		            <div class="slds-col--padded slds-size--1-of-2">
+		                  <apex:repeat value="{!s.right}" var="f">  
+		                      <div class="slds-grid">
+		                          <div class="slds-col--padded slds-size--1-of-1">
+		                              <div id="{!f.fsm}" class="slds-form-element {!IF(AND(f.required, NOT(f.readOnly)), 'slds-is-required', '')}">
+		                                  <label class="slds-form-element__label"><span class="error-color" style="display: {!IF(AND(f.required, NOT(f.readOnly)), 'inline', 'none')}">*</span>{!SUBSTITUTE(f.fsm.Label, 'ID', '')}
+		                                  	<div class="help-container" style="display: {!IF(f.helpText == null || f.helpText == '', 'none', 'inline-block')};" >
+					                    		<img src="{!URLFOR($Resource.LightningDesignSystem092, 'assets/icons/action/question_post_action_60.png')}" alt="" title="{!f.helpText}"/>
+					                    	</div>
+		                                  </label>
+		                                  <div class="slds-form-element__control input-field {!IF(f.dataType == 'PICKLIST','container-select','')}">
+		                                  	<apex:outputPanel rendered="{!f.readOnly && f.dataType == 'REFERENCE'}" layout="none">
+		                                      	<apex:inputField value="{!lineItem[IF(f.fsm == 'Product2Id', 'PricebookEntry.Product2Id', IF(f.fsm == 'ProductCode' , 'PricebookEntry.Product2.ProductCode', f.fsm))]}" />
+		                                   	  </apex:outputPanel>
+		                                   	  <apex:outputPanel rendered="{!f.readOnly && f.dataType != 'REFERENCE'}" layout="none">
+		                                      	<apex:outputField value="{!lineItem[IF(f.fsm == 'Product2Id', 'PricebookEntry.Product2Id', IF(f.fsm == 'ProductCode' , 'PricebookEntry.Product2.ProductCode', f.fsm))]}" />
+		                                   	  </apex:outputPanel>
+		                                  	 <apex:outputPanel rendered="{!NOT(f.readOnly)}" layout="none">
+		                                      	<apex:inputField styleClass="{!IF(f.dataType == 'PICKLIST', 'slds-select', IF(f.dataType == 'TEXTAREA', 'slds-textarea', IF(f.dataType == 'MULTIPICKLIST', '', 'slds-input')))}" value="{!lineItem[IF(f.fsm == 'Product2Id', 'PricebookEntry.Product2Id', IF(f.fsm == 'ProductCode' , 'PricebookEntry.Product2.ProductCode', f.fsm))]}" />
+		                                   	  </apex:outputPanel>
+		                                  </div>
+		                              </div>  
+		                          </div>
+		                      </div>
+		                  </apex:repeat>
+		            </div>
+		          </div>
+		        </div>
+	      </apex:repeat>
+            
+          <!-- SECTIONS END --> 
+          <apex:actionFunction name="saveData" action="{!save}" rerender="editForm" /> 
+          <apex:actionFunction name="saveDataAndRedirectToOpp" action="{!saveToOpp}" rerender="editForm" />
+         
+       <script type="text/javascript">
+        	$(function()
+			{
+				$.each($('.multiSelectPicklistRow img'), function()
+				{
+					//alert($(this));
+					$(this).css("height", "20px");
+				});
+				
+				$.each($('a.slds-input'), function()
+				{
+					$(this).removeAttr('class');
+				});
+				
+				setTimeout(timeoutFunc, 1500);
+			});	
+			
+			function  timeoutFunc()
+			{
+				$.each($('.multiSelectPicklistRow td'), function(index)
+				{
+					if((index % 3) == 1)
+					{
+						$(this).attr("style","width: 10%; text-align: center;");
+					}
+					else
+					{
+						$(this).attr("style","width: 45%;");
+					}
+				});
+				
+				$.each($('.multiSelectPicklistRow select'), function()
+				{
+					//alert($(this));
+					$(this).attr("style","width: 100%;");
+					$(this).attr("class","slds-input");
+				});
+				
+				$.each($('select[disabled]'), function()
+				{
+					//alert($(this));
+					$(this).attr('class', 'slds-select');
+				});
+			}
+			
+			function validateAndSave() 
+			{
+				validateAndSave(false);
+			}
+			
+			function validateAndSave(redirectToOpp) 
+			{
+				var valid = true;
+				
+				clearValidation();
+				
+				//require text fields
+				$.each($('.slds-is-required input'), function()
+				{
+					if($(this).val() == '')
+					{
+						$(this).parents('.slds-is-required').addClass('slds-has-error');
+						valid = false;
+					}
+				});
+				
+				//require textarea fields
+				$.each($('.slds-is-required textarea'), function()
+				{
+					if($(this).val() == '')
+					{
+						$(this).parents('.slds-is-required').addClass('slds-has-error');
+						valid = false;
+					}
+				});
+				
+				//require multi-select
+				$.each($('.slds-is-required table select[multiple="multiple"]'), function()
+				{
+					if(($(this).val() == null || $(this).val() == '' || $(this).val() == '--None--') && 
+						$(this).attr('ondblclick') != undefined && $(this).attr('ondblclick').indexOf('.handleMSPUnSelect') > 0
+						&& $(this).children('option').length == 0)
+					{
+						var selector = '#' + $(this).attr('id').replace('_selected','').replace(/:/g, '\\:') + ' :selected';
+						alert(selector);
+						if($(selector).length == 0)
+						{
+							$(this).parents('.slds-is-required').addClass('slds-has-error');
+							valid = false;
+						}
+					}
+				});
+				
+				//require single-select
+				$.each($('.slds-is-required select'), function()
+				{
+					if(($(this).val() == null || $(this).val() == '' || $(this).val() == '--None--') && 
+						$(this).attr('ondblclick') == undefined && $(this).attr('multiple') == undefined)
+					{
+						$(this).parents('.slds-is-required').addClass('slds-has-error');
+						valid = false;
+					}
+				});
+				
+				if(valid)
+				{
+					if(redirectToOpp) 
+					{
+						saveDataAndRedirectToOpp();
+					}
+					else
+					{
+						saveData();
+					}
+				}
+			}
+			
+			function clearValidation()
+			{
+				$('.slds-is-required').removeClass('slds-has-error');
+			}
+		</script>
+	</apex:outputPanel>  
+</apex:component>

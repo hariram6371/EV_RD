@@ -1,0 +1,2 @@
+<apex:page standardController="Order__c" action="{!standardCloneOrder}" extensions="cloneOrderController"> 
+</apex:page>

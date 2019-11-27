@@ -1,0 +1,78 @@
+<apex:page controller="OOPController" title="Eagleview Invoice Payment" showHeader="false" sidebar="false" standardStylesheets="false">  
+    <apex:composition template="OOPTemplate">
+        
+        <apex:define name="header">
+            <c:OOPHeader stepFile="" showLabel="" />    
+        </apex:define>
+
+        <apex:define name="body">           
+        
+            <apex:form id="oopForm">
+                <apex:outputPanel rendered="{!oppNotAvailable}">
+                    <apex:outputText styleclass="textHighlightWarning" value="{!oppNotAvailableLabel}" escape="false"></apex:outputText>
+                </apex:outputPanel>
+                
+                <div class="textHighlight" style="text-align:center;width:99%;">Deposit for contract number {!oop.opportunity.Opportunity_Number__c}.</div>
+                
+                <apex:outputPanel rendered="{!!oppNotAvailable }">
+                    <table style="width: 100%;" cellpadding="5">
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td style="text-align:right;width:150px;vertical-align:top;">
+                                <b>Deposit:</b>
+                            </td>
+                            <td style="text-align:right;width:100px;vertical-align:top;">
+                                $<apex:outputText value="{!IF(oop.opportunity.Payment_Amount_1__c == null, 0.00, oop.opportunity.Payment_Amount_1__c)}" style="width:70px;"></apex:outputText>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td style="text-align:right;width:150px;vertical-align:top;">
+                                <b>Sales Tax:</b>
+                            </td>
+                            <td style="text-align:right;width:100px;vertical-align:top;">
+                                $<apex:outputText value="{!IF(oop.opportunity.Sales_Tax__c == null, 0.00, oop.opportunity.Sales_Tax__c)}" style="width:70px;"></apex:outputText>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td style="text-align:right;width:150px;vertical-align:top;color:red;">
+                                <b>Payment Amount:</b>
+                            </td>
+                            <td style="text-align:right;width:100px;vertical-align:top;">
+                                $<apex:outputText value="{!miniPayAmount}" id="miniPay" style="width:70px;"></apex:outputText>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td></td>
+                            <td style="text-align:right;width:100px;vertical-align:top;">
+                                <apex:commandButton action="{!refreshMiniPayment}" value="Pay Now" />
+                            </td>
+                        </tr>
+                    </table>
+                    <div>
+                        <apex:outputText styleclass="textHighlightWarning" value="{!amountError}" escape="false"></apex:outputText>
+                    </div>
+                </apex:outputPanel>
+            </apex:form>
+
+            <form id="payment_confirmation" action="{!cybersourceURL}" method="post">
+                <apex:outputPanel rendered="{!!oop.zeroAmount && oppNotAvailable == false && miniPayReady == true}" id="payCardPanel">
+                    
+                    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
+                      <script type="text/javascript">
+                        $(document).ready(function() {
+                          window.document.forms[1].submit();
+                        });
+                      </script>
+                    
+                    <apex:outputText value="{!viewCCData}" escape="false" rendered="false" />
+                    <apex:outputText value="{!formCCData}" escape="false" />
+                </apex:outputPanel>
+            </form>
+            <br /><br />
+            
+        </apex:define>
+    </apex:composition>
+</apex:page>
